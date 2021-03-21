@@ -13,6 +13,10 @@ import modele.deplacements.Ordonnanceur;
 import java.awt.Point;
 import java.util.HashMap;
 
+// Java Program to illustrate reading from 
+// FileReader using FileReader 
+import java.io.*; 
+
 /** Actuellement, cette classe gère les postions
  * (ajouter conditions de victoire, chargement du plateau, etc.)
  */
@@ -55,17 +59,56 @@ public class Jeu {
     
     private void initialisationDesEntites() {
         hector = new Heros(this);
-        addEntite(hector, 2, 1);
-
+        
         Gravite g = new Gravite();
         g.addEntiteDynamique(hector);
         ordonnanceur.add(g);
 
         Controle4Directions.getInstance().addEntiteDynamique(hector);
         ordonnanceur.add(Controle4Directions.getInstance());
+        
+        char[][] tab = new char[SIZE_X][SIZE_Y]; // Tableau tampon qui va contenir le fichier txt
+        
+        try {
+            // We need to provide file path as the parameter: 
+            // double backquote is to avoid compiler interpret words 
+            // like \test as \t (ie. as a escape sequence) 
+            File file = new File("map.txt"); // Fichier texte contenant le squelette de la carte 
+
+            BufferedReader br = new BufferedReader(new FileReader(file));
+
+            String st;
+            int j = 0;
+            while ((st = br.readLine()) != null) { // st -> contient la ligne du fichier à chaque boucle
+                for (int i = 0; i < st.length(); i++) { // On découpe st en char
+                    //System.out.print(st.charAt(j));
+                    tab[i][j] = st.charAt(i); // chaque char est stocké dans la case du tableau correspondant
+                }
+                j++;
+            }
+        } catch (IOException e) {
+            e.getMessage();
+        }
+        
+        // Un fois tab rempli on le parcours pour connaître les entitées à ajouter dans la grille
+        for (int i = 0; i < SIZE_X; i++) {
+            for (int j = 0; j < SIZE_Y; j++) {
+                switch (tab[i][j]) {
+                    case 'm' -> addEntite(new Mur(this), i, j); // mur
+                    case 'h' -> addEntite(hector, i, j); // héro
+                    case 'b' -> addEntite(new Bombe(this), i, j); // bombe
+                    default -> {
+                    }
+                }
+                // m -> mur
+                //System.out.print(tab[i][j]);
+                // h -> héro
+                // b -> bombe
+                            }
+        }
 
         // murs extérieurs horizontaux
-        for (int x = 0; x < 20; x++) {
+        /*for (int x = 0; x < 20; x++) {
             addEntite(new Mur(this), x, 0);
             addEntite(new Mur(this), x, 9);
         }
@@ -77,7 +120,7 @@ public class Jeu {
         }
 
         addEntite(new Mur(this), 2, 6);
-        addEntite(new Mur(this), 3, 6);
+        addEntite(new Mur(this), 3, 6);*/
     }
 
     private void addEntite(Entite e, int x, int y) {
