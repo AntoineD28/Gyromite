@@ -97,6 +97,11 @@ public class Jeu {
                     case 'm' -> addEntite(new Mur(this), i, j); // mur
                     case 'h' -> addEntite(hector, i, j); // héro
                     case 'b' -> addEntite(new Bombe(this), i, j); // bombe
+                    case 'a' -> addEntite(new ColonneHaut(this), i, j);  
+                    case 'z' -> addEntite(new ColonneMilieu(this), i, j);  
+                    case 'e' -> addEntite(new ColonneBas(this), i, j);  
+                    case 'c' -> addEntite(new Corde(this), i, j);
+                    case 'X' -> addEntite(new Bot(this), i, j); // bombe
                     default -> {
                     }
                 }
