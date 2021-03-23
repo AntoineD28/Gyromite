@@ -27,7 +27,7 @@ public class Ordonnanceur extends Observable implements Runnable {
     @Override
     public void run() {
         boolean update = false;
-
+        
         while(true) {
             jeu.resetCmptDepl();
             for (RealisateurDeDeplacement d : lstDeplacements) {
