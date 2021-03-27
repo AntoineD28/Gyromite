@@ -175,13 +175,18 @@ public class Jeu {
         }
 
         if (retour) {
-            if (objetALaPosition(pCible) instanceof Corde) {
-                if (tmp instanceof Corde)
-                    grilleEntites[pCourant.x][pCourant.y] = tmp;
-                tmp = grilleEntites[pCible.x][pCible.y];
-                deplacerEntite(pCourant, pCible, e, true);
+            if (objetALaPosition(pCible) instanceof Corde) { // Si la pCible est une corde
+                if (tmp != null) { // Si Hector est déjà sur la corde 
+                    deplacerEntite(pCourant, pCible, e, true); // On déplace Hector en premier
+                    grilleEntites[pCourant.x][pCourant.y] = tmp; // On replace la corde 
+                } else { // Si Hector va prendre la corde 
+                    tmp = grilleEntites[pCible.x][pCible.y]; // On stocke la l'entité corde pour pourvoir la remettre après le passage d'Hector
+                    deplacerEntite(pCourant, pCible, e, true);
+                }
             }
             else  {
+                grilleEntites[pCourant.x][pCourant.y] = tmp; // On replace la corde 
+                tmp = null; // On vide tmp car hector ne sera plus sur la corde 
                 deplacerEntite(pCourant, pCible, e, false);
             }
         }
@@ -203,19 +208,20 @@ public class Jeu {
         
         return pCible;
     }
-    
-    private void deplacerEntite(Point pCourant, Point pCible, Entite e, Boolean Corde) {
-        if (!Corde) {
-            grilleEntites[pCourant.x][pCourant.y] = tmp;
-            tmp = null;
-        }
-        else {
+
+    private void deplacerEntite(Point pCourant, Point pCible, Entite e, Boolean Corde) { // Surcharge pour le déplacement sur une corde
+        if (Corde)
             grilleEntites[pCourant.x][pCourant.y] = null;
-        }
         grilleEntites[pCible.x][pCible.y] = e;
         map.put(e, pCible);
     }
-    
+
+    private void deplacerEntite(Point pCourant, Point pCible, Entite e) {
+        grilleEntites[pCourant.x][pCourant.y] = null;
+        grilleEntites[pCible.x][pCible.y] = e;
+        map.put(e, pCible);
+    }
+
     /** Indique si p est contenu dans la grille
      */
     private boolean contenuDansGrille(Point p) {
