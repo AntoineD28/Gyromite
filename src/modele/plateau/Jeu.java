@@ -159,7 +159,6 @@ public class Jeu {
                 case haut:
                     if (cmptDeplV.get(e) == null) {
                         cmptDeplV.put(e, 1);
-
                         retour = true;
                     }
                     break;
@@ -168,7 +167,6 @@ public class Jeu {
                     if (cmptDeplH.get(e) == null) {
                         cmptDeplH.put(e, 1);
                         retour = true;
-
                     }
                     break;
             }

@@ -33,11 +33,8 @@ public class Controle4Directions extends RealisateurDeDeplacement {
                             ret = true;
                         break;
                     case bas:
-                        Entite eBas2 = e.regarderDansLaDirection(Direction.bas);
-                        if (eBas2 != null && eBas2.peutServirDeSupport()) {
-                            if (e.avancerDirectionChoisie(Direction.bas)) {
-                                ret = true;
-                            }
+                        if (e.avancerDirectionChoisie(Direction.bas)) {
+                            ret = true;
                         }
                         break;
                     case haut:
