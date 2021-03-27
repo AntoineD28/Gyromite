@@ -30,6 +30,7 @@ public class Jeu {
     private HashMap<Entite, Integer> cmptDeplV = new HashMap<Entite, Integer>();
 
     private Heros hector;
+    private Entite tmp; // Permet de stocker une entité 
 
     private HashMap<Entite, Point> map = new  HashMap<Entite, Point>(); // permet de récupérer la position d'une entité à partir de sa référence
     private Entite[][] grilleEntites = new Entite[SIZE_X][SIZE_Y]; // permet de récupérer une entité à partir de ses coordonnées
@@ -133,11 +134,11 @@ public class Jeu {
         map.put(e, new Point(x, y));
     }
     
-    /** Permet par exemple a une entité  de percevoir sont environnement proche et de définir sa stratégie de déplacement
+    /** Permet par exemple a une entité de percevoir sont environnement proche et de définir sa stratégie de déplacement
      *
      */
     public Entite regarderDansLaDirection(Entite e, Direction d) {
-        Point positionEntite = map.get(e);
+        Point positionEntite = map.get(e);   
         return objetALaPosition(calculerPointCible(positionEntite, d));
     }
     
@@ -151,7 +152,7 @@ public class Jeu {
         
         Point pCible = calculerPointCible(pCourant, d);
         
-        if (contenuDansGrille(pCible) && objetALaPosition(pCible) == null) { // a adapter (collisions murs, etc.)
+        if (contenuDansGrille(pCible) && (objetALaPosition(pCible) == null || objetALaPosition(pCible) instanceof Corde)) { // a adapter (collisions murs, etc.)
             // compter le déplacement : 1 deplacement horizontal et vertical max par pas de temps par entité
             switch (d) {
                 case bas:
@@ -174,7 +175,15 @@ public class Jeu {
         }
 
         if (retour) {
-            deplacerEntite(pCourant, pCible, e);
+            if (objetALaPosition(pCible) instanceof Corde) {
+                if (tmp instanceof Corde)
+                    grilleEntites[pCourant.x][pCourant.y] = tmp;
+                tmp = grilleEntites[pCible.x][pCible.y];
+                deplacerEntite(pCourant, pCible, e, true);
+            }
+            else  {
+                deplacerEntite(pCourant, pCible, e, false);
+            }
         }
 
         return retour;
@@ -195,8 +204,14 @@ public class Jeu {
         return pCible;
     }
     
-    private void deplacerEntite(Point pCourant, Point pCible, Entite e) {
-        grilleEntites[pCourant.x][pCourant.y] = null;
+    private void deplacerEntite(Point pCourant, Point pCible, Entite e, Boolean Corde) {
+        if (!Corde) {
+            grilleEntites[pCourant.x][pCourant.y] = tmp;
+            tmp = null;
+        }
+        else {
+            grilleEntites[pCourant.x][pCourant.y] = null;
+        }
         grilleEntites[pCible.x][pCible.y] = e;
         map.put(e, pCible);
     }

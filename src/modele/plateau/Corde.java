@@ -15,4 +15,8 @@ public class Corde extends EntiteStatique {
         super(_jeu); 
     }
     
+    @Override
+    public boolean peutServirDeSupport(){ return true; }; 
+    @Override
+    public boolean peutPermettreDeMonterDescendre() { return true; };
 }

@@ -21,7 +21,7 @@ public class Ordonnanceur extends Observable implements Runnable {
 
     public void start(long _pause) {
         pause = _pause;
-        new Thread(this).start();
+        new Thread(this).start(); // Appel de la fonction Ordonnanceur.run()
     }
 
     @Override
@@ -30,20 +30,20 @@ public class Ordonnanceur extends Observable implements Runnable {
         
         while(true) {
             jeu.resetCmptDepl();
-            for (RealisateurDeDeplacement d : lstDeplacements) {
-                if (d.realiserDeplacement())
+            for (RealisateurDeDeplacement d : lstDeplacements) { // On parcours la liste lstDeplacements
+                if (d.realiserDeplacement()) // On appel realiserDeplacement() de la classe à laquelle appartient d (Gravite, Controle4directions, ...)
                     update = true;
             }
 
-            Controle4Directions.getInstance().resetDirection();
+            Controle4Directions.getInstance().resetDirection(); // On remet à null la direction courante 
 
-            if (update) {
+            if (update) { // Si update == true
                 setChanged();
-                notifyObservers();
+                notifyObservers(); // Appel de la fonction VueControleurGyromite.update()
             }
 
             try {
-                sleep(pause);
+                sleep(pause); // pause == 300 ms
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
