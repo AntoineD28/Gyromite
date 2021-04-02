@@ -9,6 +9,7 @@ import modele.deplacements.Controle4Directions;
 import modele.deplacements.Direction;
 import modele.deplacements.Gravite;
 import modele.deplacements.Ordonnanceur;
+import modele.deplacements.Colonne;
 
 import java.awt.Point;
 import java.util.HashMap;
@@ -31,6 +32,7 @@ public class Jeu {
 
     private Heros hector;
     private Entite tmp; // Permet de stocker une entité 
+    private int cptCol = 1;
 
     private HashMap<Entite, Point> map = new  HashMap<Entite, Point>(); // permet de récupérer la position d'une entité à partir de sa référence
     private Entite[][] grilleEntites = new Entite[SIZE_X][SIZE_Y]; // permet de récupérer une entité à partir de ses coordonnées
@@ -68,6 +70,8 @@ public class Jeu {
         Controle4Directions.getInstance().addEntiteDynamique(hector);
         ordonnanceur.add(Controle4Directions.getInstance());
         
+        
+        
         char[][] tab = new char[SIZE_X][SIZE_Y]; // Tableau tampon qui va contenir le fichier txt
         
         try {
@@ -95,17 +99,40 @@ public class Jeu {
         for (int i = 0; i < SIZE_X; i++) {
             for (int j = 0; j < SIZE_Y; j++) {
                 switch (tab[i][j]) {
-                    case 'm' -> addEntite(new Mur(this), i, j); // mur
-                    case 'h' -> addEntite(hector, i, j); // héro
-                    case 'b' -> addEntite(new Bombe(this), i, j); // bombe
-                    case 'a' -> addEntite(new ColonneHaut(this), i, j);  
-                    case 'z' -> addEntite(new ColonneMilieu(this), i, j);  
-                    case 'e' -> addEntite(new ColonneBas(this), i, j);  
-                    case 'c' -> addEntite(new Corde(this), i, j);
-                    case 'X' -> addEntite(new Bot(this), i, j); // bombe
-                    default -> {
+                    case 'm':
+                        addEntite(new Mur(this), i, j);
+                        break;// mur
+                    case 'h':
+                        addEntite(hector, i, j);
+                        break;// héro
+                    case 'b':
+                        addEntite(new Bombe(this), i, j);
+                        break;// bombe
+                    case 'a':
+                        ColonneHaut C_h = new ColonneHaut(this);
+                        addEntite(C_h, i, j);
+                        Colonne.getInstance().addEntiteDynamique(C_h);
+                        break;
+                    case 'z':
+                        ColonneMilieu C_m = new ColonneMilieu(this);
+                        addEntite(C_m, i, j);
+                        Colonne.getInstance().addEntiteDynamique(C_m);
+                        break;
+                    case 'e':
+                        ColonneBas C_b = new ColonneBas(this);
+                        addEntite(C_b, i, j);
+                        Colonne.getInstance().addEntiteDynamique(C_b);
+                        break;
+                    case 'c':
+                        addEntite(new Corde(this), i, j);
+                        break;
+                    case 'X':
+                        addEntite(new Bot(this), i, j);
+                        break;// bombe
+                    default: {
                     }
                 }
+                ordonnanceur.add(Colonne.getInstance());
                 // m -> mur
                 //System.out.print(tab[i][j]);
                 // h -> héro
@@ -148,6 +175,7 @@ public class Jeu {
     public boolean deplacerEntite(Entite e, Direction d) {
         boolean retour = false;
         
+        System.out.println(e);
         Point pCourant = map.get(e);
         
         Point pCible = calculerPointCible(pCourant, d);
@@ -159,7 +187,6 @@ public class Jeu {
                 case haut:
                     if (cmptDeplV.get(e) == null) {
                         cmptDeplV.put(e, 1);
-
                         retour = true;
                     }
                     break;
@@ -168,7 +195,12 @@ public class Jeu {
                     if (cmptDeplH.get(e) == null) {
                         cmptDeplH.put(e, 1);
                         retour = true;
-
+                    }
+                    break;
+                case monter:
+                    if (cmptDeplV.get(e) == null) {
+                        cmptDeplV.put(e, 1);
+                        retour = true;
                     }
                     break;
             }
@@ -181,10 +213,13 @@ public class Jeu {
                     grilleEntites[pCourant.x][pCourant.y] = tmp; // On replace la corde 
                 } else { // Si Hector va prendre la corde 
                     tmp = grilleEntites[pCible.x][pCible.y]; // On stocke la l'entité corde pour pourvoir la remettre après le passage d'Hector
-                    deplacerEntite(pCourant, pCible, e, true);
+                    deplacerEntite(pCourant, pCible, e);
                 }
             }
-            else  {
+            else if(objetALaPosition(pCourant) instanceof modele.plateau.Colonne){
+                deplacerEntite(pCourant, pCible, e);
+            }
+            else {
                 grilleEntites[pCourant.x][pCourant.y] = tmp; // On replace la corde 
                 tmp = null; // On vide tmp car hector ne sera plus sur la corde 
                 deplacerEntite(pCourant, pCible, e, false);

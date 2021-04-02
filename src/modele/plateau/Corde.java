@@ -16,7 +16,7 @@ public class Corde extends EntiteStatique {
     }
     
     @Override
-    public boolean peutServirDeSupport(){ return true; }; 
+    public boolean peutServirDeSupport(){ return false; }; 
     @Override
     public boolean peutPermettreDeMonterDescendre() { return true; };
 }
