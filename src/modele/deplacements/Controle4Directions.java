@@ -22,6 +22,7 @@ public class Controle4Directions extends RealisateurDeDeplacement {
         directionCourante = _directionCourante;
     }
 
+    @Override
     public boolean realiserDeplacement() {
         boolean ret = false;
         for (EntiteDynamique e : lstEntitesDynamiques) {
