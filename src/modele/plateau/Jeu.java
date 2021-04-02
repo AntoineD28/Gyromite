@@ -209,7 +209,8 @@ public class Jeu {
         return pCible;
     }
 
-    private void deplacerEntite(Point pCourant, Point pCible, Entite e, Boolean Corde) { // Surcharge pour le déplacement sur une corde
+    // Surcharge pour le déplacement sur une corde
+    private void deplacerEntite(Point pCourant, Point pCible, Entite e, Boolean Corde) {
         if (Corde)
             grilleEntites[pCourant.x][pCourant.y] = null;
         grilleEntites[pCible.x][pCible.y] = e;
