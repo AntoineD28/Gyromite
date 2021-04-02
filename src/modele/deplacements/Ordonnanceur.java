@@ -33,9 +33,11 @@ public class Ordonnanceur extends Observable implements Runnable {
             for (RealisateurDeDeplacement d : lstDeplacements) { // On parcours la liste lstDeplacements
                 if (d.realiserDeplacement()) // On appel realiserDeplacement() de la classe à laquelle appartient d (Gravite, Controle4directions, ...)
                     update = true;
+                    //System.out.println(d);
             }
 
             Controle4Directions.getInstance().resetDirection(); // On remet à null la direction courante 
+            Colonne.getInstance().resetDirection(); // On remet à null la direction courante
 
             if (update) { // Si update == true
                 setChanged();
