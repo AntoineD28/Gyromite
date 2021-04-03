@@ -12,6 +12,8 @@ public class Colonne extends RealisateurDeDeplacement {
     
     private static Colonne c3d;
     
+    private int colCpt = 0;
+    
     public static Colonne getInstance() {
         if (c3d == null) {
             c3d = new Colonne();
@@ -26,20 +28,22 @@ public class Colonne extends RealisateurDeDeplacement {
    
     protected boolean realiserDeplacement() { 
         boolean ret = false;
-        System.out.println(directionCourante);
+        //System.out.println(directionCourante);
             for (EntiteDynamique e : lstEntitesDynamiques) {
                 //System.out.println(e);
                 //System.out.println(directionCourante);
                 if (directionCourante != null) {
                     switch (directionCourante) {
                         case monter:
-                            if (e.avancerDirectionChoisie(Direction.haut)&&e.avancerDirectionChoisie(Direction.haut)&&e.avancerDirectionChoisie(Direction.haut)) {
+                            if (e.avancerDirectionChoisie(Direction.haut)) {
                                 ret = true;
+                                colCpt++;
                             }
                             break;
                         case descendre:
                             if (e.avancerDirectionChoisie(Direction.bas)) {
                                 ret = true;
+                                colCpt++;
                             }
                             break;
                         /*case bas:
@@ -67,4 +71,13 @@ public class Colonne extends RealisateurDeDeplacement {
     public void resetDirection() {
         directionCourante = null;
     }
+    
+    public int getCpt(){
+        return colCpt;
+    }
+    
+    public void setCpt(int cpt){
+        colCpt = cpt;
+    }
+    
 }

@@ -173,7 +173,7 @@ public class Jeu {
     public boolean deplacerEntite(Entite e, Direction d) {
         boolean retour = false;
         
-        System.out.println(e);
+        //System.out.println(e);
         Point pCourant = map.get(e);
         
         Point pCible = calculerPointCible(pCourant, d);
