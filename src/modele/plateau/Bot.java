@@ -5,19 +5,21 @@
  */
 package modele.plateau;
 
-import java.util.Random;
+import modele.deplacements.Direction;
 
 /**
  * Ennemis (Smicks)
  */
 public class Bot extends EntiteDynamique {
-    private Random r = new Random();
-
+    
     public Bot(Jeu _jeu) {
         super(_jeu);
     }
-
+    
+    @Override
     public boolean peutEtreEcrase() { return true; }
+    @Override
     public boolean peutServirDeSupport() { return true; }
+    @Override
     public boolean peutPermettreDeMonterDescendre() { return false; };
 }

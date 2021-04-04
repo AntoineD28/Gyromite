@@ -10,6 +10,8 @@ import modele.deplacements.Direction;
 import modele.deplacements.Gravite;
 import modele.deplacements.Ordonnanceur;
 import modele.deplacements.Colonne;
+import modele.deplacements.IA;
+
 
 import java.awt.Point;
 import java.util.HashMap;
@@ -125,12 +127,17 @@ public class Jeu {
                         addEntite(new Corde(this), i, j);
                         break;
                     case 'X':
-                        addEntite(new Bot(this), i, j);
+                        Bot b = new Bot(this); 
+                        addEntite(b, i, j);
+                        IA.getInstance().addEntiteDynamique(b);
                         break;// bombe
                     default: {
                     }
                 }
+                
                 ordonnanceur.add(Colonne.getInstance());
+                ordonnanceur.add(IA.getInstance());
+                
                 // m -> mur
                 //System.out.print(tab[i][j]);
                 // h -> héro
@@ -165,6 +172,13 @@ public class Jeu {
     public Entite regarderDansLaDirection(Entite e, Direction d) {
         Point positionEntite = map.get(e);   
         return objetALaPosition(calculerPointCible(positionEntite, d));
+    }
+    
+    // Surcharge pour regarder en diagonale
+    public Entite regarderDansLaDirection(Entite e, Direction dg, Direction hb) { 
+        Point positionEntite = map.get(e);   
+        Entite tmp = objetALaPosition(calculerPointCible(positionEntite, dg));
+        return objetALaPosition(calculerPointCible(positionEntite, hb));
     }
     
     /** Si le déplacement de l'entité est autorisé (pas de mur ou autre entité), il est réalisé
@@ -214,7 +228,7 @@ public class Jeu {
                     deplacerEntite(pCourant, pCible, e);
                 }
             }
-            else if(objetALaPosition(pCourant) instanceof modele.plateau.Colonne){
+            else if(objetALaPosition(pCourant) instanceof modele.plateau.Colonne || objetALaPosition(pCourant) instanceof modele.plateau.Bot){
                 deplacerEntite(pCourant, pCible, e);
             }
             else {
