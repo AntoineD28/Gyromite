@@ -9,11 +9,10 @@ package modele.plateau;
  *
  * @author lenymetzger
  */
-public class ColonneMilieu extends Colonne {
+public class ColonneMilieuB extends Colonne {
     
-    public ColonneMilieu(Jeu _jeu) { 
+    public ColonneMilieuB(Jeu _jeu) { 
         super(_jeu); 
     }
-    
-    
+      
 }

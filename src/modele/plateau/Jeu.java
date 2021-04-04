@@ -72,6 +72,9 @@ public class Jeu {
         Controle4Directions.getInstance().addEntiteDynamique(hector);
         ordonnanceur.add(Controle4Directions.getInstance());
         
+        Colonne colonneRouge = new modele.deplacements.Colonne();
+        Colonne colonneBleu = new modele.deplacements.Colonne();
+        
         char[][] tab = new char[SIZE_X][SIZE_Y]; // Tableau tampon qui va contenir le fichier txt
         
         try {
@@ -108,20 +111,41 @@ public class Jeu {
                     case 'b':
                         addEntite(new Bombe(this), i, j);
                         break;// bombe
-                    case 'a':
-                        ColonneHaut C_h = new ColonneHaut(this);
-                        addEntite(C_h, i, j);
-                        Colonne.getInstance().addEntiteDynamique(C_h);
+                    case '1':
+                        ColonneHautR C_hr = new ColonneHautR(this);
+                        addEntite(C_hr, i, j);
+                        colonneRouge.getInstance().addEntiteDynamique(C_hr);
+                        colonneRouge.setPosition(Direction.bas);
                         break;
-                    case 'z':
-                        ColonneMilieu C_m = new ColonneMilieu(this);
-                        addEntite(C_m, i, j);
-                        Colonne.getInstance().addEntiteDynamique(C_m);
+                    case '2':
+                        ColonneMilieuR C_mr = new ColonneMilieuR(this);
+                        addEntite(C_mr, i, j);
+                        colonneRouge.getInstance().addEntiteDynamique(C_mr);
+                        colonneRouge.setPosition(Direction.bas);
                         break;
-                    case 'e':
-                        ColonneBas C_b = new ColonneBas(this);
-                        addEntite(C_b, i, j);
-                        Colonne.getInstance().addEntiteDynamique(C_b);
+                    case '3':
+                        ColonneBasR C_br = new ColonneBasR(this);
+                        addEntite(C_br, i, j);
+                        colonneRouge.getInstance().addEntiteDynamique(C_br);
+                        colonneRouge.setPosition(Direction.bas);
+                        break;
+                    case '4':
+                        ColonneHautB C_hb = new ColonneHautB(this);
+                        addEntite(C_hb, i, j);
+                        colonneBleu.getInstance().addEntiteDynamique(C_hb);
+                        colonneBleu.setPosition(Direction.haut);
+                        break;
+                    case '5':
+                        ColonneMilieuB C_mb = new ColonneMilieuB(this);
+                        addEntite(C_mb, i, j);
+                        colonneBleu.getInstance().addEntiteDynamique(C_mb);
+                        colonneBleu.setPosition(Direction.haut);
+                        break;
+                    case '6':
+                        ColonneBasB C_bb = new ColonneBasB(this);
+                        addEntite(C_bb, i, j);
+                        colonneBleu.getInstance().addEntiteDynamique(C_bb);
+                        colonneBleu.setPosition(Direction.haut);
                         break;
                     case 'c':
                         addEntite(new Corde(this), i, j);
@@ -135,7 +159,8 @@ public class Jeu {
                     }
                 }
                 
-                ordonnanceur.add(Colonne.getInstance());
+                ordonnanceur.add(colonneRouge.getInstance());
+                ordonnanceur.add(colonneBleu.getInstance());
                 ordonnanceur.add(IA.getInstance());
                 
                 // m -> mur
@@ -176,9 +201,10 @@ public class Jeu {
     
     // Surcharge pour regarder en diagonale
     public Entite regarderDansLaDirection(Entite e, Direction dg, Direction hb) { 
-        Point positionEntite = map.get(e);   
-        Entite tmp = objetALaPosition(calculerPointCible(positionEntite, dg));
-        return objetALaPosition(calculerPointCible(positionEntite, hb));
+        Point positionEntite = map.get(e); 
+        Entite tmp = objetALaPosition(calculerPointCible(positionEntite, hb));
+        Point positionEntiteCote = map.get(tmp);
+        return objetALaPosition(calculerPointCible(positionEntiteCote, dg));
     }
     
     /** Si le déplacement de l'entité est autorisé (pas de mur ou autre entité), il est réalisé

@@ -25,7 +25,8 @@ public class IA extends RealisateurDeDeplacement {
                     case gauche:
                         Entite eGauche = e.regarderDansLaDirection(Direction.gauche); //Vérification de la case à gauche
                         Entite eBasG = e.regarderDansLaDirection(Direction.gauche, Direction.bas); // Vérification de la case en bas à gauche
-                        //System.out.println(eBasG);
+                        System.out.println(eBasG);
+                        System.out.println(eGauche);
                         if (eGauche == null && eBasG != null) {
                             System.out.println("avancer");
                             if (e.avancerDirectionChoisie(Direction.gauche)) {
@@ -33,7 +34,7 @@ public class IA extends RealisateurDeDeplacement {
                             }
                         }
                         else {
-                            System.out.println("demi-tour");
+                            //System.out.println("demi-tour");
                             e.setDirectionCourante(Direction.droite);
                         }
                     case droite:

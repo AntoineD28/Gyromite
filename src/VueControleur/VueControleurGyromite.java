@@ -68,8 +68,16 @@ public class VueControleurGyromite extends JFrame implements Observer {
                     case KeyEvent.VK_RIGHT : Controle4Directions.getInstance().setDirectionCourante(Direction.droite); break;
                     case KeyEvent.VK_DOWN : Controle4Directions.getInstance().setDirectionCourante(Direction.bas); break;
                     case KeyEvent.VK_UP : Controle4Directions.getInstance().setDirectionCourante(Direction.haut); break;
-                    case KeyEvent.VK_S : Colonne.getInstance().setDirectionCourante(Direction.descendre); break;
-                    case KeyEvent.VK_Z : Colonne.getInstance().setDirectionCourante(Direction.monter); break;
+                    case KeyEvent.VK_SPACE : 
+                        if (Colonne.getInstance().getPosition() == Direction.monter){
+                            Colonne.getInstance().setDirectionCourante(Direction.descendre);
+                            Colonne.getInstance().setPosition(Direction.descendre);
+                        }
+                        else {
+                            Colonne.getInstance().setDirectionCourante(Direction.monter);
+                            Colonne.getInstance().setPosition(Direction.monter);
+                        }
+                            break;
                 }
             }
         });
@@ -148,14 +156,23 @@ public class VueControleurGyromite extends JFrame implements Observer {
                 else if (jeu.getGrille()[x][y] instanceof Corde) {
                     tabJLabel[x][y].setIcon(icoCorde);
                 } 
-                else if (jeu.getGrille()[x][y] instanceof ColonneHaut) {
+                else if (jeu.getGrille()[x][y] instanceof ColonneHautR) {
                     tabJLabel[x][y].setIcon(icoColonneHautR);
                 } 
-                else if (jeu.getGrille()[x][y] instanceof ColonneMilieu) {
+                else if (jeu.getGrille()[x][y] instanceof ColonneMilieuR) {
                     tabJLabel[x][y].setIcon(icoColonneMilieuR);
                 } 
-                else if (jeu.getGrille()[x][y] instanceof ColonneBas) {
+                else if (jeu.getGrille()[x][y] instanceof ColonneBasR) {
                     tabJLabel[x][y].setIcon(icoColonneBasR);
+                } 
+                else if (jeu.getGrille()[x][y] instanceof ColonneHautB) {
+                    tabJLabel[x][y].setIcon(icoColonneHautB);
+                } 
+                else if (jeu.getGrille()[x][y] instanceof ColonneMilieuB) {
+                    tabJLabel[x][y].setIcon(icoColonneMilieuB);
+                } 
+                else if (jeu.getGrille()[x][y] instanceof ColonneBasB) {
+                    tabJLabel[x][y].setIcon(icoColonneBasB);
                 } 
                 else {
                     tabJLabel[x][y].setIcon(icoVide);

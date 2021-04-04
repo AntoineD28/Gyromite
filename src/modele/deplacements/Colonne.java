@@ -14,6 +14,10 @@ public class Colonne extends RealisateurDeDeplacement {
     
     private int colCpt = 0;
     
+    private Direction lastDirection;
+    
+    private Direction position;
+    
     public static Colonne getInstance() {
         if (c3d == null) {
             c3d = new Colonne();
@@ -22,6 +26,7 @@ public class Colonne extends RealisateurDeDeplacement {
     }
     
     public void setDirectionCourante(Direction _directionCourante) {
+        lastDirection = directionCourante;
         directionCourante = _directionCourante;
         //System.out.println(directionCourante);
     }
@@ -29,18 +34,23 @@ public class Colonne extends RealisateurDeDeplacement {
     protected boolean realiserDeplacement() { 
         boolean ret = false;
         //System.out.println(directionCourante);
+        if ((lastDirection != directionCourante) && (lastDirection != null)){
+            this.setCpt(0);
+        }
             for (EntiteDynamique e : lstEntitesDynamiques) {
                 //System.out.println(e);
                 //System.out.println(directionCourante);
                 if (directionCourante != null) {
                     switch (directionCourante) {
                         case monter:
+                            lastDirection = Direction.monter;
                             if (e.avancerDirectionChoisie(Direction.haut)) {
                                 ret = true;
                                 colCpt++;
                             }
                             break;
                         case descendre:
+                            lastDirection = Direction.descendre;
                             if (e.avancerDirectionChoisie(Direction.bas)) {
                                 ret = true;
                                 colCpt++;
@@ -78,6 +88,14 @@ public class Colonne extends RealisateurDeDeplacement {
     
     public void setCpt(int cpt){
         colCpt = cpt;
+    }
+    
+    public void setPosition(Direction d){
+        position = d;
+    }
+    
+    public Direction getPosition(){
+        return position;
     }
     
 }
