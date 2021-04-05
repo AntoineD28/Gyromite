@@ -69,14 +69,24 @@ public class VueControleurGyromite extends JFrame implements Observer {
                     case KeyEvent.VK_DOWN : Controle4Directions.getInstance().setDirectionCourante(Direction.bas); break;
                     case KeyEvent.VK_UP : Controle4Directions.getInstance().setDirectionCourante(Direction.haut); break;
                     case KeyEvent.VK_SPACE : 
-                        if (Colonne.getInstance().getPosition() == Direction.monter){
+                        Colonne.getInstanceR().setDirectionCourante(Direction.changer);
+                        Colonne.getInstanceB().setDirectionCourante(Direction.changer);
+                        /*Direction p = Colonne.getInstanceR().getPositionR();
+                        if (p == Direction.bas){
+                            Colonne.getInstanceR().setDirectionCouranteR(Direction.monter);
+                        }
+                        else {
+                            Colonne.getInstanceR().setDirectionCouranteR(Direction.descendre);
+                        }
+                        
+                        /*if (Colonne.getInstance().getPosition() == Direction.monter){
                             Colonne.getInstance().setDirectionCourante(Direction.descendre);
                             Colonne.getInstance().setPosition(Direction.descendre);
                         }
                         else {
                             Colonne.getInstance().setDirectionCourante(Direction.monter);
                             Colonne.getInstance().setPosition(Direction.monter);
-                        }
+                        }*/
                             break;
                 }
             }

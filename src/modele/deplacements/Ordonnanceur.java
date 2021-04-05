@@ -40,9 +40,14 @@ public class Ordonnanceur extends Observable implements Runnable {
             /*Mettre un compteur jusqu'a 3 et reset la direction courante
             Ajouter un boolean pour savoir si la direction est reset ou pas pour incrémenter le cpt*/
             //System.out.println(Colonne.getInstance().getCpt());
-            if (Colonne.getInstance().getCpt()==6){
-                Colonne.getInstance().resetDirection(); // On remet à null la direction courante
-                Colonne.getInstance().setCpt(0);
+            if (Colonne.getInstanceR().getCpt()==6){
+                Colonne.getInstanceR().resetDirection(); // On remet à null la direction courante
+                Colonne.getInstanceB().resetDirection(); // On remet à null la direction courante
+                Colonne.getInstanceR().setCpt(0);
+                Colonne.getInstanceB().setCpt(0);
+                Direction tmp = Colonne.getInstanceR().getPosition();
+                Colonne.getInstanceR().setPosition(Colonne.getInstanceB().getPosition());
+                Colonne.getInstanceB().setPosition(tmp);
             }
 
             if (update) { // Si update == true

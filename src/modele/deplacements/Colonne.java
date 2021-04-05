@@ -2,6 +2,7 @@ package modele.deplacements;
 
 import modele.plateau.Entite;
 import modele.plateau.EntiteDynamique;
+import modele.plateau.*;
 
 /**
  * A la reception d'une commande, toutes les cases (EntitesDynamiques) des colonnes se déplacent dans la direction définie
@@ -10,7 +11,8 @@ import modele.plateau.EntiteDynamique;
 public class Colonne extends RealisateurDeDeplacement {
     private Direction directionCourante;
     
-    private static Colonne c3d;
+    private static Colonne colRouge;
+    private static Colonne colBleu;
     
     private int colCpt = 0;
     
@@ -18,62 +20,84 @@ public class Colonne extends RealisateurDeDeplacement {
     
     private Direction position;
     
-    public static Colonne getInstance() {
-        if (c3d == null) {
-            c3d = new Colonne();
+    public static Colonne getInstanceR() {
+        if (colRouge == null) {
+            colRouge = new Colonne();
         }
-        return c3d;
+        return colRouge;
+    }
+    
+    public static Colonne getInstanceB() {
+        if (colBleu == null) {
+            colBleu = new Colonne();
+        }
+        return colBleu;
+    }
+    
+    public Direction getDirectionCourante() {
+        //lastDirection = directionCouranteR;
+        return directionCourante;
     }
     
     public void setDirectionCourante(Direction _directionCourante) {
-        lastDirection = directionCourante;
+        //lastDirection = directionCouranteR;
         directionCourante = _directionCourante;
-        //System.out.println(directionCourante);
     }
    
     protected boolean realiserDeplacement() { 
         boolean ret = false;
         //System.out.println(directionCourante);
-        if ((lastDirection != directionCourante) && (lastDirection != null)){
+        /*if ((lastDirection != directionCourante) && (lastDirection != null)){
             this.setCpt(0);
-        }
+        }*/
             for (EntiteDynamique e : lstEntitesDynamiques) {
-                //System.out.println(e);
-                //System.out.println(directionCourante);
-                if (directionCourante != null) {
-                    switch (directionCourante) {
-                        case monter:
-                            lastDirection = Direction.monter;
-                            if (e.avancerDirectionChoisie(Direction.haut)) {
-                                ret = true;
-                                colCpt++;
+                //System.out.println(getInstanceR().directionCourante);
+                //System.out.println(getInstanceB().directionCourante);
+                if ((getInstanceR().directionCourante != null) && (getInstanceB().directionCourante != null)) {
+                    switch (getInstanceR().directionCourante) {
+                        case changer:
+                            //lastDirection = Direction.monter;
+                            if (((e instanceof ColonneBasR) || (e instanceof ColonneMilieuR) || (e instanceof ColonneHautR)) && (position==Direction.bas)){
+                                if (e.avancerDirectionChoisie(Direction.haut)) {
+                                    ret = true;
+                                    Colonne.getInstanceR().colCpt++;
+                                    //getInstanceB().setPosition(Direction.haut);
+                                }
+                            }
+                            if (((e instanceof ColonneBasR) || (e instanceof ColonneMilieuR) || (e instanceof ColonneHautR)) && (position==Direction.haut)){
+                                if (e.avancerDirectionChoisie(Direction.bas)) {
+                                    ret = true;
+                                    Colonne.getInstanceR().colCpt++;
+                                    //getInstanceB().setPosition(Direction.bas);
+                                }
+                            }
+                            if (((e instanceof ColonneBasB) || (e instanceof ColonneMilieuB) || (e instanceof ColonneHautB)) && (position==Direction.bas)){
+                                if (e.avancerDirectionChoisie(Direction.haut)) {
+                                    ret = true;
+                                    Colonne.getInstanceB().colCpt++;
+                                    //getInstanceB().setPosition(Direction.haut);
+                                }
+                            }
+                            if (((e instanceof ColonneBasB) || (e instanceof ColonneMilieuB) || (e instanceof ColonneHautB)) && (position==Direction.haut)){
+                                if (e.avancerDirectionChoisie(Direction.bas)) {
+                                    ret = true;
+                                    Colonne.getInstanceB().colCpt++;
+                                    //getInstanceB().setPosition(Direction.bas);
+                                }
                             }
                             break;
-                        case descendre:
-                            lastDirection = Direction.descendre;
-                            if (e.avancerDirectionChoisie(Direction.bas)) {
-                                ret = true;
-                                colCpt++;
-                            }
-                            break;
-                        /*case bas:
-                        if (e.avancerDirectionChoisie(Direction.bas)) {
-                            ret = true;
-                        }
-                        break;
-                    case haut:
-                        // on ne peut pas sauter sans prendre appui
-                        // (attention, test d'appui réalisé à partir de la position courante, si la gravité à été appliquée, il ne s'agit pas de la position affichée, amélioration possible)
-                        Entite eBas = e.regarderDansLaDirection(Direction.bas);
-                        if (eBas != null && (eBas.peutServirDeSupport()||eBas.peutPermettreDeMonterDescendre())) {
-                            if (e.avancerDirectionChoisie(Direction.haut))
-                                ret = true;
-                        }
-                        break;*/
                     }
                 }
             }
-
+            /*
+            System.out.println(getInstanceR().getPosition());
+            System.out.println(getInstanceB().getPosition());
+            Direction tmp = getInstanceR().getPosition();
+            getInstanceR().setPosition(getInstanceB().getPosition());
+            getInstanceB().setPosition(tmp);
+            System.out.println(getInstanceR().getPosition());
+            System.out.println(getInstanceB().getPosition());
+            */
 
         return ret;
     }
@@ -81,6 +105,7 @@ public class Colonne extends RealisateurDeDeplacement {
     public void resetDirection() {
         directionCourante = null;
     }
+    
     
     public int getCpt(){
         return colCpt;
