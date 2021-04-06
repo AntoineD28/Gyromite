@@ -18,13 +18,15 @@ import modele.deplacements.Colonne;
 import modele.deplacements.Direction;
 import modele.plateau.*;
 
-
-/** Cette classe a deux fonctions :
- *  (1) Vue : proposer une représentation graphique de l'application (cases graphiques, etc.)
- *  (2) Controleur : écouter les évènements clavier et déclencher le traitement adapté sur le modèle (flèches direction Pacman, etc.))
+/**
+ * Cette classe a deux fonctions : (1) Vue : proposer une représentation
+ * graphique de l'application (cases graphiques, etc.) (2) Controleur : écouter
+ * les évènements clavier et déclencher le traitement adapté sur le modèle
+ * (flèches direction Pacman, etc.))
  *
  */
 public class VueControleurGyromite extends JFrame implements Observer {
+
     private Jeu jeu; // référence sur une classe de modèle : permet d'accéder aux données du modèle pour le rafraichissement, permet de communiquer les actions clavier (ou souris)
 
     private int sizeX; // taille de la grille affichée
@@ -48,7 +50,6 @@ public class VueControleurGyromite extends JFrame implements Observer {
 
     private JLabel[][] tabJLabel; // cases graphique (au moment du rafraichissement, chaque case va être associée à une icône, suivant ce qui est présent dans le modèle)
 
-
     public VueControleurGyromite(Jeu _jeu) {
         sizeX = jeu.SIZE_X;
         sizeY = _jeu.SIZE_Y;
@@ -63,12 +64,20 @@ public class VueControleurGyromite extends JFrame implements Observer {
         addKeyListener(new KeyAdapter() { // new KeyAdapter() { ... } est une instance de classe anonyme, il s'agit d'un objet qui correspond au controleur dans MVC
             @Override
             public void keyPressed(KeyEvent e) {
-                switch(e.getKeyCode()) {  // on regarde quelle touche a été pressée
-                    case KeyEvent.VK_LEFT : Controle4Directions.getInstance().setDirectionCourante(Direction.gauche); break;
-                    case KeyEvent.VK_RIGHT : Controle4Directions.getInstance().setDirectionCourante(Direction.droite); break;
-                    case KeyEvent.VK_DOWN : Controle4Directions.getInstance().setDirectionCourante(Direction.bas); break;
-                    case KeyEvent.VK_UP : Controle4Directions.getInstance().setDirectionCourante(Direction.haut); break;
-                    case KeyEvent.VK_SPACE : 
+                switch (e.getKeyCode()) {  // on regarde quelle touche a été pressée
+                    case KeyEvent.VK_LEFT:
+                        Controle4Directions.getInstance().setDirectionCourante(Direction.gauche);
+                        break;
+                    case KeyEvent.VK_RIGHT:
+                        Controle4Directions.getInstance().setDirectionCourante(Direction.droite);
+                        break;
+                    case KeyEvent.VK_DOWN:
+                        Controle4Directions.getInstance().setDirectionCourante(Direction.bas);
+                        break;
+                    case KeyEvent.VK_UP:
+                        Controle4Directions.getInstance().setDirectionCourante(Direction.haut);
+                        break;
+                    case KeyEvent.VK_SPACE:
                         Colonne.getInstanceR().setDirectionCourante(Direction.changer);
                         Colonne.getInstanceB().setDirectionCourante(Direction.changer);
                         /*Direction p = Colonne.getInstanceR().getPositionR();
@@ -87,12 +96,11 @@ public class VueControleurGyromite extends JFrame implements Observer {
                             Colonne.getInstance().setDirectionCourante(Direction.monter);
                             Colonne.getInstance().setPosition(Direction.monter);
                         }*/
-                            break;
+                        break;
                 }
             }
         });
     }
-
 
     private void chargerLesIcones() {
         icoHero = chargerIcone("Images/Vector.png");
@@ -142,50 +150,69 @@ public class VueControleurGyromite extends JFrame implements Observer {
         add(grilleJLabels);
     }
 
-    
     /**
-     * Il y a une grille du côté du modèle ( jeu.getGrille() ) et une grille du côté de la vue (tabJLabel)
+     * Il y a une grille du côté du modèle ( jeu.getGrille() ) et une grille du
+     * côté de la vue (tabJLabel)
      */
     private void mettreAJourAffichage() {
 
         for (int x = 0; x < sizeX; x++) {
             for (int y = 0; y < sizeY; y++) {
-                if (jeu.getGrille()[x][y] instanceof Heros) { // si la grille du modèle contient un Pacman, on associe l'icône Pacman du côté de la vue
-                    // System.out.println("Héros !");
-                    tabJLabel[x][y].setIcon(icoHero);
-                } 
-                else if (jeu.getGrille()[x][y] instanceof Mur) {
-                    tabJLabel[x][y].setIcon(icoMur);
-                } 
-                else if (jeu.getGrille()[x][y] instanceof Bombe) {
-                    tabJLabel[x][y].setIcon(icoBombe);
-                } 
-                else if (jeu.getGrille()[x][y] instanceof Bot) {
-                    tabJLabel[x][y].setIcon(icoBot);
-                } 
-                else if (jeu.getGrille()[x][y] instanceof Corde) {
-                    tabJLabel[x][y].setIcon(icoCorde);
-                } 
-                else if (jeu.getGrille()[x][y] instanceof ColonneHautR) {
-                    tabJLabel[x][y].setIcon(icoColonneHautR);
-                } 
-                else if (jeu.getGrille()[x][y] instanceof ColonneMilieuR) {
-                    tabJLabel[x][y].setIcon(icoColonneMilieuR);
-                } 
-                else if (jeu.getGrille()[x][y] instanceof ColonneBasR) {
-                    tabJLabel[x][y].setIcon(icoColonneBasR);
-                } 
-                else if (jeu.getGrille()[x][y] instanceof ColonneHautB) {
-                    tabJLabel[x][y].setIcon(icoColonneHautB);
-                } 
-                else if (jeu.getGrille()[x][y] instanceof ColonneMilieuB) {
-                    tabJLabel[x][y].setIcon(icoColonneMilieuB);
-                } 
-                else if (jeu.getGrille()[x][y] instanceof ColonneBasB) {
-                    tabJLabel[x][y].setIcon(icoColonneBasB);
-                } 
-                else {
+                if (jeu.getGrille()[x][y].isEmpty()) {
                     tabJLabel[x][y].setIcon(icoVide);
+                }
+                if (jeu.getGrille()[x][y].size() == 1) {
+                    if (jeu.getGrille()[x][y].get(0) instanceof Heros) { // si la grille du modèle contient un Pacman, on associe l'icône Pacman du côté de la vue
+                        // System.out.println("Héros !");
+                        tabJLabel[x][y].setIcon(icoHero);
+                    } else if (jeu.getGrille()[x][y].get(0) instanceof Mur) {
+                        tabJLabel[x][y].setIcon(icoMur);
+                    } else if (jeu.getGrille()[x][y].get(0) instanceof Bombe) {
+                        tabJLabel[x][y].setIcon(icoBombe);
+                    } else if (jeu.getGrille()[x][y].get(0) instanceof Bot) {
+                        tabJLabel[x][y].setIcon(icoBot);
+                    } else if (jeu.getGrille()[x][y].get(0) instanceof Corde) {
+                        tabJLabel[x][y].setIcon(icoCorde);
+                    } else if (jeu.getGrille()[x][y].get(0) instanceof ColonneHautR) {
+                        tabJLabel[x][y].setIcon(icoColonneHautR);
+                    } else if (jeu.getGrille()[x][y].get(0) instanceof ColonneMilieuR) {
+                        tabJLabel[x][y].setIcon(icoColonneMilieuR);
+                    } else if (jeu.getGrille()[x][y].get(0) instanceof ColonneBasR) {
+                        tabJLabel[x][y].setIcon(icoColonneBasR);
+                    } else if (jeu.getGrille()[x][y].get(0) instanceof ColonneHautB) {
+                        tabJLabel[x][y].setIcon(icoColonneHautB);
+                    } else if (jeu.getGrille()[x][y].get(0) instanceof ColonneMilieuB) {
+                        tabJLabel[x][y].setIcon(icoColonneMilieuB);
+                    } else if (jeu.getGrille()[x][y].get(0) instanceof ColonneBasB) {
+                        tabJLabel[x][y].setIcon(icoColonneBasB);
+                    }
+                }
+
+                if (jeu.getGrille()[x][y].size() == 2) {
+                    if (jeu.getGrille()[x][y].get(1) instanceof Heros) { // si la grille du modèle contient un Pacman, on associe l'icône Pacman du côté de la vue
+                        // System.out.println("Héros !");
+                        tabJLabel[x][y].setIcon(icoHero);
+                    } else if (jeu.getGrille()[x][y].get(1) instanceof Mur) {
+                        tabJLabel[x][y].setIcon(icoMur);
+                    } else if (jeu.getGrille()[x][y].get(1) instanceof Bombe) {
+                        tabJLabel[x][y].setIcon(icoBombe);
+                    } else if (jeu.getGrille()[x][y].get(1) instanceof Bot) {
+                        tabJLabel[x][y].setIcon(icoBot);
+                    } else if (jeu.getGrille()[x][y].get(1) instanceof Corde) {
+                        tabJLabel[x][y].setIcon(icoCorde);
+                    } else if (jeu.getGrille()[x][y].get(1) instanceof ColonneHautR) {
+                        tabJLabel[x][y].setIcon(icoColonneHautR);
+                    } else if (jeu.getGrille()[x][y].get(1) instanceof ColonneMilieuR) {
+                        tabJLabel[x][y].setIcon(icoColonneMilieuR);
+                    } else if (jeu.getGrille()[x][y].get(1) instanceof ColonneBasR) {
+                        tabJLabel[x][y].setIcon(icoColonneBasR);
+                    } else if (jeu.getGrille()[x][y].get(1) instanceof ColonneHautB) {
+                        tabJLabel[x][y].setIcon(icoColonneHautB);
+                    } else if (jeu.getGrille()[x][y].get(1) instanceof ColonneMilieuB) {
+                        tabJLabel[x][y].setIcon(icoColonneMilieuB);
+                    } else if (jeu.getGrille()[x][y].get(1) instanceof ColonneBasB) {
+                        tabJLabel[x][y].setIcon(icoColonneBasB);
+                    }
                 }
             }
         }
@@ -201,7 +228,7 @@ public class VueControleurGyromite extends JFrame implements Observer {
                         mettreAJourAffichage();
                     }
                 }); 
-        */
+         */
 
     }
 }

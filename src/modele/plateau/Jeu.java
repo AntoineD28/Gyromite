@@ -19,6 +19,7 @@ import java.util.HashMap;
 // Java Program to illustrate reading from 
 // FileReader using FileReader 
 import java.io.*; 
+import java.util.ArrayList;
 
 /** Actuellement, cette classe gère les postions
  * (ajouter conditions de victoire, chargement du plateau, etc.)
@@ -37,11 +38,17 @@ public class Jeu {
     private int cptCol = 1;
 
     private HashMap<Entite, Point> map = new  HashMap<Entite, Point>(); // permet de récupérer la position d'une entité à partir de sa référence
-    private Entite[][] grilleEntites = new Entite[SIZE_X][SIZE_Y]; // permet de récupérer une entité à partir de ses coordonnées
+    private ArrayList<Entite> grilleEntites[][]  = new ArrayList[SIZE_X][SIZE_Y];
+   //private Entite[][] grilleEntites = new Entite[SIZE_X][SIZE_Y]; // permet de récupérer une entité à partir de ses coordonnées
 
     private Ordonnanceur ordonnanceur = new Ordonnanceur(this);
 
     public Jeu() {
+        for (int i = 0; i < SIZE_X; i++) {
+            for (int j = 0; j < SIZE_Y; j++) {
+                grilleEntites[i][j] = new ArrayList<Entite>();
+            }
+        }
         initialisationDesEntites();
     }
 
@@ -54,7 +61,7 @@ public class Jeu {
         ordonnanceur.start(_pause);
     }
     
-    public Entite[][] getGrille() {
+    public  ArrayList<Entite>[][] getGrille() {
         return grilleEntites;
     }
     
@@ -184,7 +191,8 @@ public class Jeu {
     }
 
     private void addEntite(Entite e, int x, int y) {
-        grilleEntites[x][y] = e;
+        grilleEntites[x][y].add(e);
+        //System.out.println(grilleEntites[x][y].get(0));
         map.put(e, new Point(x, y));
     }
     
@@ -215,7 +223,7 @@ public class Jeu {
         
         Point pCible = calculerPointCible(pCourant, d);
         
-        if (contenuDansGrille(pCible) && (objetALaPosition(pCible) == null || objetALaPosition(pCible) instanceof Corde)) { // a adapter (collisions murs, etc.)
+        if (contenuDansGrille(pCible) && (objetALaPosition(pCible) == null || objetALaPosition(pCible) instanceof Corde || objetALaPosition(pCible) instanceof Heros || objetALaPosition(pCible) instanceof Bot)) { // a adapter (collisions murs, etc.)
             // compter le déplacement : 1 deplacement horizontal et vertical max par pas de temps par entité
             switch (d) {
                 case bas:
@@ -243,21 +251,14 @@ public class Jeu {
 
         if (retour) {
             if (objetALaPosition(pCible) instanceof Corde) { // Si la pCible est une corde
-                if (tmp != null) { // Si Hector est déjà sur la corde 
-                    deplacerEntite(pCourant, pCible, e, true); // On déplace Hector en premier
-                    grilleEntites[pCourant.x][pCourant.y] = tmp; // On replace la corde 
-                } else { // Si Hector va prendre la corde 
-                    tmp = grilleEntites[pCible.x][pCible.y]; // On stocke la l'entité corde pour pourvoir la remettre après le passage d'Hector
-                    deplacerEntite(pCourant, pCible, e);
-                }
-            }
-            else if(objetALaPosition(pCourant) instanceof modele.plateau.Colonne || objetALaPosition(pCourant) instanceof modele.plateau.Bot){
-                deplacerEntite(pCourant, pCible, e);
+                deplacerEntite(pCourant, pCible, e, true);
+            } 
+            else if ((objetALaPosition(pCible) instanceof Heros || objetALaPosition(pCible) instanceof Bot) && objetALaPosition(pCourant) instanceof modele.plateau.Colonne) {
+                supprimerEntite(pCourant, pCible, e);
+                //deplacerEntite(pCourant, pCible, e);
             }
             else {
-                grilleEntites[pCourant.x][pCourant.y] = tmp; // On replace la corde 
-                tmp = null; // On vide tmp car hector ne sera plus sur la corde 
-                deplacerEntite(pCourant, pCible, e, false);
+                deplacerEntite(pCourant, pCible, e);
             }
         }
 
@@ -282,15 +283,26 @@ public class Jeu {
     // Surcharge pour le déplacement sur une corde
     private void deplacerEntite(Point pCourant, Point pCible, Entite e, Boolean Corde) {
         if (Corde)
-            grilleEntites[pCourant.x][pCourant.y] = null;
-        grilleEntites[pCible.x][pCible.y] = e;
+            if (grilleEntites[pCourant.x][pCourant.y].size() == 2)
+                grilleEntites[pCourant.x][pCourant.y].remove(1);
+            else grilleEntites[pCourant.x][pCourant.y].clear();
+        grilleEntites[pCible.x][pCible.y].add(e);
         map.put(e, pCible);
     }
 
     private void deplacerEntite(Point pCourant, Point pCible, Entite e) {
-        grilleEntites[pCourant.x][pCourant.y] = null;
-        grilleEntites[pCible.x][pCible.y] = e;
+        if (grilleEntites[pCourant.x][pCourant.y].size() == 2) {
+            grilleEntites[pCourant.x][pCourant.y].remove(1);
+        } else grilleEntites[pCourant.x][pCourant.y].clear();
+        //System.out.println(grilleEntites[pCourant.x][pCourant.y]);
+        grilleEntites[pCible.x][pCible.y].clear();
+        grilleEntites[pCible.x][pCible.y].add(e);
         map.put(e, pCible);
+    }
+    
+    private void supprimerEntite(Point pCourant, Point pCible, Entite e) {
+        grilleEntites[pCible.x][pCible.y].clear();
+        map.put(null, pCible);
     }
 
     /** Indique si p est contenu dans la grille
@@ -303,7 +315,10 @@ public class Jeu {
         Entite retour = null;
         
         if (contenuDansGrille(p)) {
-            retour = grilleEntites[p.x][p.y];
+            //System.out.println(grilleEntites[p.x][p.y]);
+            if (grilleEntites[p.x][p.y].size() == 0)
+                retour = null;
+            else retour = grilleEntites[p.x][p.y].get(0);
         }
         
         return retour;

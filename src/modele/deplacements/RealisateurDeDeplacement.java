@@ -12,4 +12,6 @@ public abstract class RealisateurDeDeplacement {
     protected abstract boolean realiserDeplacement();
 
     public void addEntiteDynamique(EntiteDynamique ed) {lstEntitesDynamiques.add(ed);};
+    public void RemEntiteDynamique(int index) {lstEntitesDynamiques.remove(index);};
+    public int GetEntiteDynamique(EntiteDynamique ed) {return lstEntitesDynamiques.indexOf(ed);};
 }

@@ -60,28 +60,28 @@ public class Colonne extends RealisateurDeDeplacement {
                             if (((e instanceof ColonneBasR) || (e instanceof ColonneMilieuR) || (e instanceof ColonneHautR)) && (position==Direction.bas)){
                                 if (e.avancerDirectionChoisie(Direction.haut)) {
                                     ret = true;
-                                    Colonne.getInstanceR().colCpt++;
+                                    colCpt++;
                                     //getInstanceB().setPosition(Direction.haut);
                                 }
                             }
                             if (((e instanceof ColonneBasR) || (e instanceof ColonneMilieuR) || (e instanceof ColonneHautR)) && (position==Direction.haut)){
                                 if (e.avancerDirectionChoisie(Direction.bas)) {
                                     ret = true;
-                                    Colonne.getInstanceR().colCpt++;
+                                    colCpt++;
                                     //getInstanceB().setPosition(Direction.bas);
                                 }
                             }
                             if (((e instanceof ColonneBasB) || (e instanceof ColonneMilieuB) || (e instanceof ColonneHautB)) && (position==Direction.bas)){
                                 if (e.avancerDirectionChoisie(Direction.haut)) {
                                     ret = true;
-                                    Colonne.getInstanceB().colCpt++;
+                                    colCpt++;
                                     //getInstanceB().setPosition(Direction.haut);
                                 }
                             }
                             if (((e instanceof ColonneBasB) || (e instanceof ColonneMilieuB) || (e instanceof ColonneHautB)) && (position==Direction.haut)){
                                 if (e.avancerDirectionChoisie(Direction.bas)) {
                                     ret = true;
-                                    Colonne.getInstanceB().colCpt++;
+                                    colCpt++;
                                     //getInstanceB().setPosition(Direction.bas);
                                 }
                             }
