@@ -60,7 +60,7 @@ public class Jeu {
     }
 
     private void reset() {
-        for (RealisateurDeDeplacement r : ordonnanceur.getLstDeplacements()) r.reset();
+        for (RealisateurDeDeplacement r : ordonnanceur.getLstDeplacements()){r.reset();}
         ordonnanceur.reset();
         map = new  HashMap<Entite, Point>();
         resetCmptDepl();
@@ -71,6 +71,7 @@ public class Jeu {
             }
         }
         NbBombe = 0;
+        HerosDead = false;
         initialisationDesEntites();
     }
     
@@ -186,16 +187,18 @@ public class Jeu {
                     }
                 }
                 
-                ordonnanceur.add(Colonne.getInstanceR());
-                ordonnanceur.add(Colonne.getInstanceB());
-                ordonnanceur.add(IA.getInstance());
+
                 
                 // m -> mur
                 //System.out.print(tab[i][j]);
                 // h -> héro
                 // b -> bombe
-                            }
+            }
         }
+        
+        ordonnanceur.add(Colonne.getInstanceR());
+        ordonnanceur.add(Colonne.getInstanceB());
+        ordonnanceur.add(IA.getInstance());
 
         // murs extérieurs horizontaux
         /*for (int x = 0; x < 20; x++) {

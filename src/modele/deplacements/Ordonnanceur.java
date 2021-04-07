@@ -37,15 +37,25 @@ public class Ordonnanceur extends Observable implements Runnable {
     @Override
     public void run() {
         boolean update = false;
-        
+        int IAlent = 0;
+        System.out.println(lstDeplacements);
         while(true) {
             jeu.resetCmptDepl();
             for (RealisateurDeDeplacement d : lstDeplacements) { // On parcours la liste lstDeplacements
-                if (d.realiserDeplacement()) // On appel realiserDeplacement() de la classe à laquelle appartient d (Gravite, Controle4directions, ...)
-                    update = true;
-                    //System.out.println(d);
+                if (d instanceof IA){
+                    if (IAlent%2==0){
+                        //System.out.println(d);
+                        if (d.realiserDeplacement()) // On appel realiserDeplacement() de la classe à laquelle appartient d (Gravite, Controle4directions, ...)
+                            update = true;
+                    }
+                    IAlent++;
+                }
+                else{
+                    if (d.realiserDeplacement()) // On appel realiserDeplacement() de la classe à laquelle appartient d (Gravite, Controle4directions, ...)
+                        update = true;
+                }
             }
-
+            
             Controle4Directions.getInstance().resetDirection(); // On remet à null la direction courante 
             /*Mettre un compteur jusqu'a 3 et reset la direction courante
             Ajouter un boolean pour savoir si la direction est reset ou pas pour incrémenter le cpt*/
@@ -72,6 +82,7 @@ public class Ordonnanceur extends Observable implements Runnable {
             
             jeu.ConditionFin();
 
+            //System.out.println("//");
             try {
                 sleep(pause); // pause == 300 ms
             } catch (InterruptedException e) {

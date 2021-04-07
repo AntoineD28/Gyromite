@@ -25,15 +25,12 @@ public class IA extends RealisateurDeDeplacement {
             if (e.getDirection() != null) {
                 
                 // Début du processus pour permettre au smicks de prendre les cordes
-                /* Entite eHaut = e.regarderDansLaDirection(Direction.haut);
-                 Entite eGauche = e.regarderDansLaDirection(Direction.gauche);
-                 Entite eBasG = e.regarderDansLaDirection(Direction.gauche, Direction.bas);
-                 if (eHaut != null && eHaut.peutPermettreDeMonterDescendre())
-                     e.setDirectionCourante(Direction.haut);
-                 else if (eGauche == null && eBasG != null) {
-                     e.setDirectionCourante(Direction.gauche);
-                 }
-                 else e.setDirectionCourante(Direction.gauche);*/
+                eHaut = e.regarderDansLaDirection(Direction.haut);
+                eGauche = e.regarderDansLaDirection(Direction.gauche);
+                //eBasG = e.regarderDansLaDirection(Direction.gauche, Direction.bas);
+                if (eHaut != null && eHaut.peutPermettreDeMonterDescendre())
+                    e.setDirectionCourante(Direction.haut);
+                else e.setDirectionCourante(Direction.gauche);
                  
                 switch (e.getDirection()) {
                     case gauche:
