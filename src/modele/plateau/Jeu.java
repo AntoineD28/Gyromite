@@ -11,7 +11,6 @@ import modele.deplacements.Gravite;
 import modele.deplacements.Ordonnanceur;
 import modele.deplacements.Colonne;
 import modele.deplacements.IA;
-import modele.deplacements.RealisateurDeDeplacement;
 
 
 import java.awt.Point;
@@ -21,6 +20,7 @@ import java.util.HashMap;
 // FileReader using FileReader 
 import java.io.*; 
 import java.util.ArrayList;
+import modele.deplacements.RealisateurDeDeplacement;
 
 /** Actuellement, cette classe gère les postions
  * (ajouter conditions de victoire, chargement du plateau, etc.)
@@ -28,6 +28,7 @@ import java.util.ArrayList;
 public class Jeu {
     
     public static boolean GameOver;
+    private static boolean HerosDead;
     
     public static final int SIZE_X = 20;
     public static final int SIZE_Y = 10;
@@ -39,12 +40,13 @@ public class Jeu {
     private Heros hector;
     private Entite tmp; // Permet de stocker une entité 
     private int cptCol = 1;
+    private int NbBombe = 0;
 
     private HashMap<Entite, Point> map = new  HashMap<Entite, Point>(); // permet de récupérer la position d'une entité à partir de sa référence
     private ArrayList<Entite> grilleEntites[][]  = new ArrayList[SIZE_X][SIZE_Y];
    //private Entite[][] grilleEntites = new Entite[SIZE_X][SIZE_Y]; // permet de récupérer une entité à partir de ses coordonnées
 
-    private Ordonnanceur ordonnanceur = new Ordonnanceur(this);
+    private Ordonnanceur ordonnanceur;
 
     public Jeu() {
         for (int i = 0; i < SIZE_X; i++) {
@@ -53,9 +55,25 @@ public class Jeu {
             }
         }
         GameOver = false;
+        ordonnanceur = new Ordonnanceur(this);
         initialisationDesEntites();
     }
 
+    private void reset() {
+        for (RealisateurDeDeplacement r : ordonnanceur.getLstDeplacements()) r.reset();
+        ordonnanceur.reset();
+        map = new  HashMap<Entite, Point>();
+        resetCmptDepl();
+        grilleEntites = new ArrayList[SIZE_X][SIZE_Y];
+        for (int i = 0; i < SIZE_X; i++) {
+            for (int j = 0; j < SIZE_Y; j++) {
+                grilleEntites[i][j] = new ArrayList<Entite>();
+            }
+        }
+        NbBombe = 0;
+        initialisationDesEntites();
+    }
+    
     public void resetCmptDepl() {
         cmptDeplH.clear();
         cmptDeplV.clear();
@@ -118,6 +136,7 @@ public class Jeu {
                         break;// héro
                     case 'b':
                         addEntite(new Bombe(this), i, j);
+                        NbBombe++;
                         break;// bombe
                     case '1':
                         ColonneHautR C_hr = new ColonneHautR(this);
@@ -227,7 +246,7 @@ public class Jeu {
         
         Point pCible = calculerPointCible(pCourant, d);
         
-        if (contenuDansGrille(pCible) && (objetALaPosition(pCible) == null || objetALaPosition(pCible) instanceof Corde || objetALaPosition(pCible) instanceof Heros || objetALaPosition(pCible) instanceof Bot)) { // a adapter (collisions murs, etc.)
+        if (contenuDansGrille(pCible) && (objetALaPosition(pCible) == null || objetALaPosition(pCible).peutPermettreDeMonterDescendre() || objetALaPosition(pCible).peutEtreEcrase() ||objetALaPosition(pCible).peutEtreRamasse())) { // a adapter (collisions murs, etc.)
             // compter le déplacement : 1 deplacement horizontal et vertical max par pas de temps par entité
             switch (d) {
                 case bas:
@@ -255,7 +274,7 @@ public class Jeu {
 
         if (retour) {
             //if (e instanceof Heros) System.out.println("héros");
-            if (objetALaPosition(pCible) instanceof Corde) { // Si la pCible est une corde
+            if (objetALaPosition(pCible) instanceof Corde || (objetALaPosition(pCible) instanceof Bombe && objetALaPosition(pCourant) instanceof Bot)) { // Si la pCible est une corde
                 //if (e instanceof modele.plateau.Colonne) System.out.println("Colonne1");
                 deplacerEntite(pCourant, pCible, e, true);
             } 
@@ -264,6 +283,13 @@ public class Jeu {
             }
             else if ((objetALaPosition(pCible) instanceof Heros) && objetALaPosition(pCourant) instanceof Bot) {
                 supprimerDeplacerEntite(pCourant, pCible, e);
+            }
+            else if (objetALaPosition(pCible) instanceof Bombe) {
+                //System.out.println(NbBombe);
+                NbBombe--;
+                deplacerEntite(pCourant, pCible, e);
+                //System.out.println(NbBombe);
+                //if (NbBombe == 0) GameOver = true;
             }
             else {
                 //if (e instanceof modele.plateau.Colonne) System.out.println("Colonne3");
@@ -318,7 +344,7 @@ public class Jeu {
         if(objetALaPosition(pCible) instanceof Heros){
             Controle4Directions.getInstance().RemEntiteDynamique((EntiteDynamique)objetALaPosition(pCible));
             Gravite.getInstance().RemEntiteDynamique((EntiteDynamique)objetALaPosition(pCible));
-            GameOver = true;
+            HerosDead = true;
         }
         grilleEntites[pCible.x][pCible.y].clear();
         grilleEntites[pCible.x][pCible.y].add(e);
@@ -337,7 +363,7 @@ public class Jeu {
         
         if (contenuDansGrille(p)) {
             //System.out.println(grilleEntites[p.x][p.y]);
-            if (grilleEntites[p.x][p.y].size() == 0)
+            if (grilleEntites[p.x][p.y].isEmpty())
                 retour = null;
             else retour = grilleEntites[p.x][p.y].get(0);
         }
@@ -355,5 +381,11 @@ public class Jeu {
     
     public void setGameOver(boolean b) {
         GameOver = b;
+    }
+    
+    public void ConditionFin() {
+        if (NbBombe == 0 || HerosDead) {
+            reset();
+        }
     }
 }

@@ -11,4 +11,9 @@ package modele.plateau;
  */
 public class Bombe extends EntiteStatique {
     public Bombe(Jeu _jeu) { super(_jeu); }
+    
+    @Override
+    public boolean peutEtreRamasse() {return true;};
+    @Override
+    public boolean peutServirDeSupport() { return false; }
 }

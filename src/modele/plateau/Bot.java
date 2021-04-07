@@ -22,4 +22,6 @@ public class Bot extends EntiteDynamique {
     public boolean peutServirDeSupport() { return true; }
     @Override
     public boolean peutPermettreDeMonterDescendre() { return false; };
+    @Override
+    public boolean peutEtreRamasse() {return false;};
 }

@@ -18,23 +18,27 @@ public class GyromiteProject {
      */
     public static void main(String[] args) {
         boolean play = true;
-        int cpt = 1;
+        //int cpt = 1;
         Jeu jeu = new Jeu();
+        VueControleurGyromite vc =  new VueControleurGyromite(jeu);
         while(true) {
-            System.out.println(jeu.getGameOver());
+            //System.out.println(jeu.getGameOver());
             if(jeu.getGameOver() || play){
-                play = false;
-                
-                if (cpt != 1)
+                //play = false;
+                if (!play) {
+                    //jeu = null;
                     jeu = new Jeu();
-
-                VueControleurGyromite vc = new VueControleurGyromite(jeu);
+                    jeu.setGameOver(false);
+                    vc = new VueControleurGyromite(jeu);
+                }
+                
+                play = false;
 
                 jeu.getOrdonnanceur().addObserver(vc);
 
                 vc.setVisible(true);
                 jeu.start(300);
-                cpt++;
+                //cpt++;
                 //System.out.println("GameOver");
             }
         } 

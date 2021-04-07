@@ -19,16 +19,29 @@ public class IA extends RealisateurDeDeplacement {
     @Override
     protected boolean realiserDeplacement() {
         boolean ret = false;
+        Entite eGauche, eHaut, eBasG;
         for (EntiteDynamique e : lstEntitesDynamiques) {
             //System.out.println(directionCourante);
             if (e.getDirection() != null) {
+                
+                // Début du processus pour permettre au smicks de prendre les cordes
+                /* Entite eHaut = e.regarderDansLaDirection(Direction.haut);
+                 Entite eGauche = e.regarderDansLaDirection(Direction.gauche);
+                 Entite eBasG = e.regarderDansLaDirection(Direction.gauche, Direction.bas);
+                 if (eHaut != null && eHaut.peutPermettreDeMonterDescendre())
+                     e.setDirectionCourante(Direction.haut);
+                 else if (eGauche == null && eBasG != null) {
+                     e.setDirectionCourante(Direction.gauche);
+                 }
+                 else e.setDirectionCourante(Direction.gauche);*/
+                 
                 switch (e.getDirection()) {
                     case gauche:
-                        Entite eGauche = e.regarderDansLaDirection(Direction.gauche); //Vérification de la case à gauche
-                        Entite eBasG = e.regarderDansLaDirection(Direction.gauche, Direction.bas); // Vérification de la case en bas à gauche
+                        eGauche = e.regarderDansLaDirection(Direction.gauche); //Vérification de la case à gauche
+                        eBasG = e.regarderDansLaDirection(Direction.gauche, Direction.bas); // Vérification de la case en bas à gauche
                         //System.out.println(eBasG);
                         //System.out.println(eGauche);
-                        if ((eGauche == null || eGauche instanceof Heros) && eBasG != null) {
+                        if ((eGauche == null || eGauche.peutEtreRamasse() || eGauche.peutEtreEcrase() || eGauche.peutPermettreDeMonterDescendre()) && eBasG != null) {
                             //System.out.println("avancer");
                             if (e.avancerDirectionChoisie(Direction.gauche)) {
                                     ret = true;
@@ -41,7 +54,7 @@ public class IA extends RealisateurDeDeplacement {
                     case droite:
                         Entite eDroite = e.regarderDansLaDirection(Direction.droite);
                         Entite eBasD = e.regarderDansLaDirection(Direction.bas);
-                        if (eDroite == null && eBasD != null) {
+                        if ((eDroite == null || eDroite.peutEtreRamasse() || eDroite.peutEtreEcrase()|| eDroite.peutPermettreDeMonterDescendre()) && eBasD != null) {
                             if (e.avancerDirectionChoisie(Direction.droite)) {
                                 ret = true;
                             }

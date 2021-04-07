@@ -16,6 +16,14 @@ public class Ordonnanceur extends Observable implements Runnable {
         lstDeplacements.add(deplacement);
     }
 
+    public ArrayList<RealisateurDeDeplacement> getLstDeplacements() {
+        return lstDeplacements;
+    }
+    
+    public void reset() {
+        lstDeplacements.clear();
+    }
+    
     public Ordonnanceur(Jeu _jeu) {
         jeu = _jeu;
     }
@@ -57,10 +65,12 @@ public class Ordonnanceur extends Observable implements Runnable {
                 notifyObservers(); // Appel de la fonction VueControleurGyromite.update()
             }
             
-            if(Controle4Directions.getInstance().GetLengthListe()==0){
+            /*if(Controle4Directions.getInstance().GetLengthListe()==0){
                 //GyromitePorject.recommencer = true;
                 break;
-            }
+            }*/
+            
+            jeu.ConditionFin();
 
             try {
                 sleep(pause); // pause == 300 ms
@@ -68,7 +78,7 @@ public class Ordonnanceur extends Observable implements Runnable {
                 e.printStackTrace();
             }
         }
-        System.out.println("test");
+        //System.out.println("test");
         //t.stop();
     }
 }
