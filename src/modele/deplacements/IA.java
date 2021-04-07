@@ -3,6 +3,7 @@ package modele.deplacements;
 import modele.plateau.Entite;
 import modele.plateau.EntiteDynamique;
 import modele.plateau.Mur;
+import modele.plateau.Heros;
 
 public class IA extends RealisateurDeDeplacement {
 
@@ -27,7 +28,7 @@ public class IA extends RealisateurDeDeplacement {
                         Entite eBasG = e.regarderDansLaDirection(Direction.gauche, Direction.bas); // Vérification de la case en bas à gauche
                         //System.out.println(eBasG);
                         //System.out.println(eGauche);
-                        if (eGauche == null && eBasG != null) {
+                        if ((eGauche == null || eGauche instanceof Heros) && eBasG != null) {
                             //System.out.println("avancer");
                             if (e.avancerDirectionChoisie(Direction.gauche)) {
                                     ret = true;

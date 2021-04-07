@@ -8,6 +8,7 @@ import java.util.Observable;
 import static java.lang.Thread.*;
 
 public class Ordonnanceur extends Observable implements Runnable {
+    private Thread t;
     private Jeu jeu;
     private ArrayList<RealisateurDeDeplacement> lstDeplacements = new ArrayList<RealisateurDeDeplacement>();
     private long pause;
@@ -21,7 +22,8 @@ public class Ordonnanceur extends Observable implements Runnable {
 
     public void start(long _pause) {
         pause = _pause;
-        new Thread(this).start(); // Appel de la fonction Ordonnanceur.run()
+        t = new Thread(this); // Appel de la fonction Ordonnanceur.run()
+        t.start();
     }
 
     @Override
@@ -54,6 +56,11 @@ public class Ordonnanceur extends Observable implements Runnable {
                 setChanged();
                 notifyObservers(); // Appel de la fonction VueControleurGyromite.update()
             }
+            
+            if(Controle4Directions.getInstance().GetLengthListe()==0){
+                //GyromitePorject.recommencer = true;
+                break;
+            }
 
             try {
                 sleep(pause); // pause == 300 ms
@@ -61,6 +68,7 @@ public class Ordonnanceur extends Observable implements Runnable {
                 e.printStackTrace();
             }
         }
-
+        System.out.println("test");
+        //t.stop();
     }
 }
