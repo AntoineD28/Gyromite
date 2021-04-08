@@ -40,7 +40,7 @@ public class Ordonnanceur extends Observable implements Runnable {
     public void run() {
         boolean update = false;
         int IAlent = 0;
-
+        
         while(true) {
             jeu.resetCmptDepl();
             for (RealisateurDeDeplacement d : lstDeplacements) { // On parcours la liste lstDeplacements
@@ -59,7 +59,7 @@ public class Ordonnanceur extends Observable implements Runnable {
 
             Controle4Directions.getInstance().resetDirection(); // On remet à null la direction courante 
             
-            if (Colonne.getInstanceR().getCpt()==6){
+            if (Colonne.getInstanceR().getCpt() == 6 * (Colonne.getInstanceR().GetLengthListe()/3)){
                 Colonne.getInstanceR().resetDirection(); // On remet à null la direction courante
                 Colonne.getInstanceR().setCpt(0);
                 if (Colonne.getInstanceR().getPosition() == Direction.bas)
@@ -67,7 +67,7 @@ public class Ordonnanceur extends Observable implements Runnable {
                 else Colonne.getInstanceR().setPosition(Direction.bas);
             }
             
-            if (Colonne.getInstanceB().getCpt()==6){
+            if (Colonne.getInstanceB().getCpt()== 6 * (Colonne.getInstanceB().GetLengthListe()/3)){
                 Colonne.getInstanceB().resetDirection(); // On remet à null la direction courante
                 Colonne.getInstanceB().setCpt(0);
                 if (Colonne.getInstanceB().getPosition() == Direction.bas)

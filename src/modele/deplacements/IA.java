@@ -24,7 +24,7 @@ public class IA extends RealisateurDeDeplacement {
     protected boolean realiserDeplacement() {
         boolean ret = false;
         Entite eGauche, eHaut, eBas, eBasG;
-        
+        System.out.println(lstEntitesDynamiques);
         for (EntiteDynamique e : lstEntitesDynamiques) {
             Bot actuel = (Bot)e;
             boolean monter = actuel.getMonter();
@@ -81,7 +81,7 @@ public class IA extends RealisateurDeDeplacement {
                         break;
                     case droite:
                         Entite eDroite = e.regarderDansLaDirection(Direction.droite);
-                        Entite eBasD = e.regarderDansLaDirection(Direction.bas);
+                        Entite eBasD = e.regarderDansLaDirection(Direction.droite, Direction.bas);
                         if ((eDroite == null || eDroite.peutEtreRamasse() || eDroite.peutEtreEcrase()|| eDroite.peutPermettreDeMonterDescendre()) && eBasD != null) {
                             if (e.avancerDirectionChoisie(Direction.droite)) {
                                 ret = true;

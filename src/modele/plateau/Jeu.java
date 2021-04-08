@@ -30,7 +30,7 @@ public class Jeu {
     public static boolean GameOver;
     private static boolean HerosDead;
     
-    public static final int SIZE_X = 20;
+    public static final int SIZE_X = 40;
     public static final int SIZE_Y = 10;
 
     // compteur de déplacements horizontal et vertical (1 max par défaut, à chaque pas de temps)
@@ -38,6 +38,7 @@ public class Jeu {
     private HashMap<Entite, Integer> cmptDeplV = new HashMap<Entite, Integer>();
 
     private Heros hector;
+    private Direction directionCouranteHeros;
     private Entite tmp; // Permet de stocker une entité 
     private int cptCol = 1;
     private int NbBombe = 0;
@@ -91,6 +92,14 @@ public class Jeu {
     public Heros getHector() {
         return hector;
     }
+    
+    public Point getHectorPos() {
+        return map.get(hector);
+    }
+    public Direction getDirCouranteHector() {
+        return directionCouranteHeros;
+    }
+   
     
     private void initialisationDesEntites() {
         hector = new Heros(this);
@@ -244,7 +253,9 @@ public class Jeu {
     public boolean deplacerEntite(Entite e, Direction d) {
         boolean retour = false;
         
-        //System.out.println(e);
+        if ( e instanceof Heros)
+            directionCouranteHeros = d;
+        
         Point pCourant = map.get(e);
         
         Point pCible = calculerPointCible(pCourant, d);
