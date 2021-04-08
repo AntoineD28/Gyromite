@@ -13,7 +13,7 @@ public abstract class RealisateurDeDeplacement {
 
     public void addEntiteDynamique(EntiteDynamique ed) {lstEntitesDynamiques.add(ed);};
     public void RemEntiteDynamique(EntiteDynamique ed) {lstEntitesDynamiques.remove(ed);};
-     public void reset() {lstEntitesDynamiques.clear();};
+    public void reset() {lstEntitesDynamiques.clear();};
     
     public int GetEntiteDynamique(EntiteDynamique ed) {return lstEntitesDynamiques.indexOf(ed);};
     

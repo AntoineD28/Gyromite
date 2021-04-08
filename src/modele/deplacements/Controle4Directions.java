@@ -23,6 +23,10 @@ public class Controle4Directions extends RealisateurDeDeplacement {
     public void setDirectionCourante(Direction _directionCourante) {
         directionCourante = _directionCourante;
     }
+    
+    public Direction getDirectionCOurante() {
+        return directionCourante;
+    }
 
     @Override
     public boolean realiserDeplacement() {

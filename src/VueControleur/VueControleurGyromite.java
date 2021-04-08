@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import static java.lang.Math.abs;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Level;
@@ -31,6 +32,7 @@ public class VueControleurGyromite extends JFrame implements Observer {
 
     private int sizeX; // taille de la grille affichée
     private int sizeY;
+    private int xSlide;
 
     // icones affichées dans la grille
     private ImageIcon icoHero;
@@ -51,9 +53,11 @@ public class VueControleurGyromite extends JFrame implements Observer {
     private JLabel[][] tabJLabel; // cases graphique (au moment du rafraichissement, chaque case va être associée à une icône, suivant ce qui est présent dans le modèle)
 
     public VueControleurGyromite(Jeu _jeu) {
+        //System.out.println(jeu.SIZE_X);
         sizeX = jeu.SIZE_X;
         sizeY = _jeu.SIZE_Y;
         jeu = _jeu;
+        xSlide = 0;
 
         chargerLesIcones();
         placerLesComposantsGraphiques();
@@ -136,12 +140,12 @@ public class VueControleurGyromite extends JFrame implements Observer {
         setSize(800, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // permet de terminer l'application à la fermeture de la fenêtre
 
-        JComponent grilleJLabels = new JPanel(new GridLayout(sizeY, sizeX)); // grilleJLabels va contenir les cases graphiques et les positionner sous la forme d'une grille
+        JComponent grilleJLabels = new JPanel(new GridLayout(sizeY, sizeX/2)); // grilleJLabels va contenir les cases graphiques et les positionner sous la forme d'une grille
 
-        tabJLabel = new JLabel[sizeX][sizeY];
+        tabJLabel = new JLabel[sizeX/2][sizeY];
 
         for (int y = 0; y < sizeY; y++) {
-            for (int x = 0; x < sizeX; x++) {
+            for (int x = 0; x < sizeX/2; x++) {
                 JLabel jlab = new JLabel();
                 tabJLabel[x][y] = jlab; // on conserve les cases graphiques dans tabJLabel pour avoir un accès pratique à celles-ci (voir mettreAJourAffichage() )
                 grilleJLabels.add(jlab);
@@ -155,62 +159,75 @@ public class VueControleurGyromite extends JFrame implements Observer {
      * côté de la vue (tabJLabel)
      */
     private void mettreAJourAffichage() {
-
-        for (int x = 0; x < sizeX; x++) {
+        //System.out.println(jeu.getHectorPos());
+        Direction dirHector = jeu.getDirCouranteHector();
+        //System.out.println(dirHector);
+        int x1;
+        System.out.println(xSlide);
+        if ((jeu.getHectorPos().x == 10 || jeu.getHectorPos().x == 20) && dirHector == Direction.droite) {
+            xSlide += 10;
+        } else if ((jeu.getHectorPos().x == 10 || jeu.getHectorPos().x == 20) && dirHector == Direction.gauche) {
+            xSlide -= 10;
+        }
+        for (int x = 0; x < sizeX/2; x++) {
             for (int y = 0; y < sizeY; y++) {
-                if (jeu.getGrille()[x][y].isEmpty()) {
+                x1 = x + xSlide;
+                /*if (sizeX/2 - jeu.getHectorPos().x <= 0)
+                    x1 = x + abs(sizeX/2 - jeu.getHectorPos().x);
+                else x1 = x;*/
+                if (jeu.getGrille()[x1][y].isEmpty()) {
                     tabJLabel[x][y].setIcon(icoVide);
                 }
-                if (jeu.getGrille()[x][y].size() == 1) {
-                    if (jeu.getGrille()[x][y].get(0) instanceof Heros) { // si la grille du modèle contient un Pacman, on associe l'icône Pacman du côté de la vue
+                if (jeu.getGrille()[x1][y].size() == 1) {
+                    if (jeu.getGrille()[x1][y].get(0) instanceof Heros) { // si la grille du modèle contient un Pacman, on associe l'icône Pacman du côté de la vue
                         // System.out.println("Héros !");
                         tabJLabel[x][y].setIcon(icoHero);
-                    } else if (jeu.getGrille()[x][y].get(0) instanceof Mur) {
+                    } else if (jeu.getGrille()[x1][y].get(0) instanceof Mur) {
                         tabJLabel[x][y].setIcon(icoMur);
-                    } else if (jeu.getGrille()[x][y].get(0) instanceof Bombe) {
+                    } else if (jeu.getGrille()[x1][y].get(0) instanceof Bombe) {
                         tabJLabel[x][y].setIcon(icoBombe);
-                    } else if (jeu.getGrille()[x][y].get(0) instanceof Bot) {
+                    } else if (jeu.getGrille()[x1][y].get(0) instanceof Bot) {
                         tabJLabel[x][y].setIcon(icoBot);
-                    } else if (jeu.getGrille()[x][y].get(0) instanceof Corde) {
+                    } else if (jeu.getGrille()[x1][y].get(0) instanceof Corde) {
                         tabJLabel[x][y].setIcon(icoCorde);
-                    } else if (jeu.getGrille()[x][y].get(0) instanceof ColonneHautR) {
+                    } else if (jeu.getGrille()[x1][y].get(0) instanceof ColonneHautR) {
                         tabJLabel[x][y].setIcon(icoColonneHautR);
-                    } else if (jeu.getGrille()[x][y].get(0) instanceof ColonneMilieuR) {
+                    } else if (jeu.getGrille()[x1][y].get(0) instanceof ColonneMilieuR) {
                         tabJLabel[x][y].setIcon(icoColonneMilieuR);
-                    } else if (jeu.getGrille()[x][y].get(0) instanceof ColonneBasR) {
+                    } else if (jeu.getGrille()[x1][y].get(0) instanceof ColonneBasR) {
                         tabJLabel[x][y].setIcon(icoColonneBasR);
-                    } else if (jeu.getGrille()[x][y].get(0) instanceof ColonneHautB) {
+                    } else if (jeu.getGrille()[x1][y].get(0) instanceof ColonneHautB) {
                         tabJLabel[x][y].setIcon(icoColonneHautB);
-                    } else if (jeu.getGrille()[x][y].get(0) instanceof ColonneMilieuB) {
+                    } else if (jeu.getGrille()[x1][y].get(0) instanceof ColonneMilieuB) {
                         tabJLabel[x][y].setIcon(icoColonneMilieuB);
-                    } else if (jeu.getGrille()[x][y].get(0) instanceof ColonneBasB) {
+                    } else if (jeu.getGrille()[x1][y].get(0) instanceof ColonneBasB) {
                         tabJLabel[x][y].setIcon(icoColonneBasB);
                     }
                 }
 
-                if (jeu.getGrille()[x][y].size() == 2) {
-                    if (jeu.getGrille()[x][y].get(1) instanceof Heros) { // si la grille du modèle contient un Pacman, on associe l'icône Pacman du côté de la vue
+                if (jeu.getGrille()[x1][y].size() == 2) {
+                    if (jeu.getGrille()[x1][y].get(1) instanceof Heros) { // si la grille du modèle contient un Pacman, on associe l'icône Pacman du côté de la vue
                         // System.out.println("Héros !");
                         tabJLabel[x][y].setIcon(icoHero);
-                    } else if (jeu.getGrille()[x][y].get(1) instanceof Mur) {
+                    } else if (jeu.getGrille()[x1][y].get(1) instanceof Mur) {
                         tabJLabel[x][y].setIcon(icoMur);
-                    } else if (jeu.getGrille()[x][y].get(1) instanceof Bombe) {
+                    } else if (jeu.getGrille()[x1][y].get(1) instanceof Bombe) {
                         tabJLabel[x][y].setIcon(icoBombe);
-                    } else if (jeu.getGrille()[x][y].get(1) instanceof Bot) {
+                    } else if (jeu.getGrille()[x1][y].get(1) instanceof Bot) {
                         tabJLabel[x][y].setIcon(icoBot);
-                    } else if (jeu.getGrille()[x][y].get(1) instanceof Corde) {
+                    } else if (jeu.getGrille()[x1][y].get(1) instanceof Corde) {
                         tabJLabel[x][y].setIcon(icoCorde);
-                    } else if (jeu.getGrille()[x][y].get(1) instanceof ColonneHautR) {
+                    } else if (jeu.getGrille()[x1][y].get(1) instanceof ColonneHautR) {
                         tabJLabel[x][y].setIcon(icoColonneHautR);
-                    } else if (jeu.getGrille()[x][y].get(1) instanceof ColonneMilieuR) {
+                    } else if (jeu.getGrille()[x1][y].get(1) instanceof ColonneMilieuR) {
                         tabJLabel[x][y].setIcon(icoColonneMilieuR);
-                    } else if (jeu.getGrille()[x][y].get(1) instanceof ColonneBasR) {
+                    } else if (jeu.getGrille()[x1][y].get(1) instanceof ColonneBasR) {
                         tabJLabel[x][y].setIcon(icoColonneBasR);
-                    } else if (jeu.getGrille()[x][y].get(1) instanceof ColonneHautB) {
+                    } else if (jeu.getGrille()[x1][y].get(1) instanceof ColonneHautB) {
                         tabJLabel[x][y].setIcon(icoColonneHautB);
-                    } else if (jeu.getGrille()[x][y].get(1) instanceof ColonneMilieuB) {
+                    } else if (jeu.getGrille()[x1][y].get(1) instanceof ColonneMilieuB) {
                         tabJLabel[x][y].setIcon(icoColonneMilieuB);
-                    } else if (jeu.getGrille()[x][y].get(1) instanceof ColonneBasB) {
+                    } else if (jeu.getGrille()[x1][y].get(1) instanceof ColonneBasB) {
                         tabJLabel[x][y].setIcon(icoColonneBasB);
                     }
                 }
