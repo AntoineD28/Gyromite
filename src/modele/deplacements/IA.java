@@ -30,7 +30,7 @@ public class IA extends RealisateurDeDeplacement {
                 //eBasG = e.regarderDansLaDirection(Direction.gauche, Direction.bas);
                 if (eHaut != null && eHaut.peutPermettreDeMonterDescendre())
                     e.setDirectionCourante(Direction.haut);
-                else e.setDirectionCourante(Direction.gauche);
+                //else e.setDirectionCourante(Direction.gauche);
                  
                 switch (e.getDirection()) {
                     case gauche:

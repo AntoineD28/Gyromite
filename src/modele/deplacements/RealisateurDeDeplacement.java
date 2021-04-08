@@ -18,4 +18,13 @@ public abstract class RealisateurDeDeplacement {
     public int GetEntiteDynamique(EntiteDynamique ed) {return lstEntitesDynamiques.indexOf(ed);};
     
     public int GetLengthListe() {return lstEntitesDynamiques.size();};
+    
+    public ArrayList<EntiteDynamique> reverseLst(){
+        ArrayList<EntiteDynamique> tmp = new ArrayList<EntiteDynamique>();
+        for (int i=lstEntitesDynamiques.size()-1; i>=0; i--){
+            tmp.add(lstEntitesDynamiques.get(i));
+        }
+        return tmp;
+    }
+    
 }

@@ -16,9 +16,10 @@ public class Colonne extends RealisateurDeDeplacement {
     
     private int colCpt = 0;
     
-    private Direction lastDirection;
+    //private Direction lastDirection;
     
     private Direction position;
+    private boolean premierTour = true;
     
     public static Colonne getInstanceR() {
         if (colRouge == null) {
@@ -50,45 +51,57 @@ public class Colonne extends RealisateurDeDeplacement {
         /*if ((lastDirection != directionCourante) && (lastDirection != null)){
             this.setCpt(0);
         }*/
+        //System.out.println("//");
+        if(!premierTour){
+            lstEntitesDynamiques = reverseLst();
+        }
+        premierTour = false;
             for (EntiteDynamique e : lstEntitesDynamiques) {
+                System.out.println(e);
+                //System.out.println("//");
                 //System.out.println(getInstanceR().directionCourante);
                 //System.out.println(getInstanceB().directionCourante);
-                if ((getInstanceR().directionCourante != null) && (getInstanceB().directionCourante != null)) {
-                    switch (getInstanceR().directionCourante) {
+                if (directionCourante != null) {
+                    switch (directionCourante) {
                         case changer:
                             //lastDirection = Direction.monter;
                             if (((e instanceof ColonneBasR) || (e instanceof ColonneMilieuR) || (e instanceof ColonneHautR)) && (position==Direction.bas)){
                                 if (e.avancerDirectionChoisie(Direction.haut)) {
+                                    System.out.println("if1");
                                     ret = true;
                                     colCpt++;
-                                    //getInstanceB().setPosition(Direction.haut);
+                                    //Colonne.getInstanceB().setPosition(Direction.haut);
                                 }
                             }
-                            if (((e instanceof ColonneBasR) || (e instanceof ColonneMilieuR) || (e instanceof ColonneHautR)) && (position==Direction.haut)){
+                            else if (((e instanceof ColonneBasR) || (e instanceof ColonneMilieuR) || (e instanceof ColonneHautR)) && (position==Direction.haut)){
                                 if (e.avancerDirectionChoisie(Direction.bas)) {
+                                    System.out.println("if2");
                                     ret = true;
                                     colCpt++;
-                                    //getInstanceB().setPosition(Direction.bas);
+                                    //Colonne.getInstanceB().setPosition(Direction.bas);
                                 }
                             }
-                            if (((e instanceof ColonneBasB) || (e instanceof ColonneMilieuB) || (e instanceof ColonneHautB)) && (position==Direction.bas)){
+                            else if (((e instanceof ColonneBasB) || (e instanceof ColonneMilieuB) || (e instanceof ColonneHautB)) && (position==Direction.bas)){
                                 if (e.avancerDirectionChoisie(Direction.haut)) {
+                                    System.out.println("if3");
                                     ret = true;
                                     colCpt++;
-                                    //getInstanceB().setPosition(Direction.haut);
+                                    //Colonne.getInstanceB().setPosition(Direction.haut);
                                 }
                             }
-                            if (((e instanceof ColonneBasB) || (e instanceof ColonneMilieuB) || (e instanceof ColonneHautB)) && (position==Direction.haut)){
+                            else if (((e instanceof ColonneBasB) || (e instanceof ColonneMilieuB) || (e instanceof ColonneHautB)) && (position==Direction.haut)){
                                 if (e.avancerDirectionChoisie(Direction.bas)) {
+                                    System.out.println("if4");
                                     ret = true;
                                     colCpt++;
-                                    //getInstanceB().setPosition(Direction.bas);
+                                    //Colonne.getInstanceB().setPosition(Direction.bas);
                                 }
                             }
                             break;
                     }
                 }
             }
+            System.out.println("//");
             /*
             System.out.println(getInstanceR().getPosition());
             System.out.println(getInstanceB().getPosition());

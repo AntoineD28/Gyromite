@@ -38,10 +38,11 @@ public class Ordonnanceur extends Observable implements Runnable {
     public void run() {
         boolean update = false;
         int IAlent = 0;
-        System.out.println(lstDeplacements);
+        //System.out.println(lstDeplacements);
         while(true) {
             jeu.resetCmptDepl();
             for (RealisateurDeDeplacement d : lstDeplacements) { // On parcours la liste lstDeplacements
+                //System.out.println(d);
                 if (d instanceof IA){
                     if (IAlent%2==0){
                         //System.out.println(d);
@@ -55,7 +56,7 @@ public class Ordonnanceur extends Observable implements Runnable {
                         update = true;
                 }
             }
-            
+            //System.out.println("//");
             Controle4Directions.getInstance().resetDirection(); // On remet à null la direction courante 
             /*Mettre un compteur jusqu'a 3 et reset la direction courante
             Ajouter un boolean pour savoir si la direction est reset ou pas pour incrémenter le cpt*/
