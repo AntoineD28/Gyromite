@@ -1,5 +1,6 @@
 package modele.deplacements;
 
+import java.util.ArrayList;
 import modele.plateau.Entite;
 import modele.plateau.EntiteDynamique;
 import modele.plateau.*;
@@ -18,10 +19,10 @@ public class Colonne extends RealisateurDeDeplacement {
 
     private int colCpt = 0;
 
-    //private Direction lastDirection;
     private Direction position;
-    private boolean premierTour = true;
 
+    
+    
     public static Colonne getInstanceR() {
         if (colRouge == null) {
             colRouge = new Colonne();
@@ -48,69 +49,49 @@ public class Colonne extends RealisateurDeDeplacement {
 
     protected boolean realiserDeplacement() {
         boolean ret = false;
-        //System.out.println(directionCourante);
-        /*if ((lastDirection != directionCourante) && (lastDirection != null)){
-            this.setCpt(0);
-        }*/
-        //System.out.println("//");
-        for (EntiteDynamique e : lstEntitesDynamiques) {
-            System.out.println(e);
-            //System.out.println("//");
-            //System.out.println(getInstanceR().directionCourante);
-            //System.out.println(getInstanceB().directionCourante);
+        ArrayList<EntiteDynamique> listeTmp = new ArrayList<EntiteDynamique>();
+
+        if (position == Direction.haut){
+            listeTmp = reverseLst();
+            int i = 0;
+        }
+        
+        else if (position == Direction.bas){
+            listeTmp = lstEntitesDynamiques;
+        }
+        
+        for (EntiteDynamique e : listeTmp) {
             if (directionCourante != null) {
-                if (!Colonne.getInstanceR().premierTour) {
-                    lstEntitesDynamiques = reverseLst();
-                }
-                Colonne.getInstanceR().premierTour = false;
-                Colonne.getInstanceR().premierTour = false;
                 switch (directionCourante) {
                     case changer:
-                        //lastDirection = Direction.monter;
                         if (((e instanceof ColonneBasR) || (e instanceof ColonneMilieuR) || (e instanceof ColonneHautR)) && (position == Direction.bas)) {
                             if (e.avancerDirectionChoisie(Direction.haut)) {
-                                System.out.println("if1");
                                 ret = true;
-                                colCpt++;
-                                //Colonne.getInstanceB().setPosition(Direction.haut);
                             }
-                        } else if (((e instanceof ColonneBasR) || (e instanceof ColonneMilieuR) || (e instanceof ColonneHautR)) && (position == Direction.haut)) {
+                            colCpt++;
+                        } 
+                        else if (((e instanceof ColonneBasR) || (e instanceof ColonneMilieuR) || (e instanceof ColonneHautR)) && (position == Direction.haut)) {
                             if (e.avancerDirectionChoisie(Direction.bas)) {
-                                System.out.println("if2");
                                 ret = true;
-                                colCpt++;
-                                //Colonne.getInstanceB().setPosition(Direction.bas);
                             }
-                        } else if (((e instanceof ColonneBasB) || (e instanceof ColonneMilieuB) || (e instanceof ColonneHautB)) && (position == Direction.bas)) {
+                            colCpt++;
+                        } 
+                        else if (((e instanceof ColonneBasB) || (e instanceof ColonneMilieuB) || (e instanceof ColonneHautB)) && (position == Direction.bas)) {
                             if (e.avancerDirectionChoisie(Direction.haut)) {
-                                System.out.println("if3");
                                 ret = true;
-                                colCpt++;
-                                //Colonne.getInstanceB().setPosition(Direction.haut);
                             }
-                        } else if (((e instanceof ColonneBasB) || (e instanceof ColonneMilieuB) || (e instanceof ColonneHautB)) && (position == Direction.haut)) {
+                            colCpt++;
+                        } 
+                        else if (((e instanceof ColonneBasB) || (e instanceof ColonneMilieuB) || (e instanceof ColonneHautB)) && (position == Direction.haut)) {
                             if (e.avancerDirectionChoisie(Direction.bas)) {
-                                System.out.println("if4");
                                 ret = true;
-                                colCpt++;
-                                //Colonne.getInstanceB().setPosition(Direction.bas);
                             }
+                            colCpt++;
                         }
                         break;
                 }
             }
         }
-        System.out.println("//");
-        /*
-            System.out.println(getInstanceR().getPosition());
-            System.out.println(getInstanceB().getPosition());
-            Direction tmp = getInstanceR().getPosition();
-            getInstanceR().setPosition(getInstanceB().getPosition());
-            getInstanceB().setPosition(tmp);
-            System.out.println(getInstanceR().getPosition());
-            System.out.println(getInstanceB().getPosition());
-         */
-
         return ret;
     }
 

@@ -257,6 +257,8 @@ public class Jeu {
                     if (cmptDeplV.get(e) == null) {
                         cmptDeplV.put(e, 1);
                         retour = true;
+                        if (objetALaPosition(pCible) == null && objetALaPosition(pCourant) instanceof Corde && d == Direction.haut)
+                            retour = false;
                     }
                     break;
                 case gauche:
@@ -278,7 +280,8 @@ public class Jeu {
         if (retour) {
             //if (e instanceof Heros) System.out.println("héros");
             if (objetALaPosition(pCible) instanceof Corde || (objetALaPosition(pCible) instanceof Bombe && objetALaPosition(pCourant) instanceof Bot)) { // Si la pCible est une corde
-                //if (e instanceof modele.plateau.Colonne) System.out.println("Colonne1");
+                //if (e instanceof modele.plateau.Colonne) 
+                //System.out.println("test");
                 deplacerEntite(pCourant, pCible, e, true);
             } 
             else if ((objetALaPosition(pCible) instanceof Heros || objetALaPosition(pCible) instanceof Bot) && objetALaPosition(pCourant) instanceof modele.plateau.Colonne) {
