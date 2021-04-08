@@ -279,16 +279,22 @@ public class Jeu {
 
         if (retour) {
             //if (e instanceof Heros) System.out.println("héros");
-            if (objetALaPosition(pCible) instanceof Corde || (objetALaPosition(pCible) instanceof Bombe && objetALaPosition(pCourant) instanceof Bot)) { // Si la pCible est une corde
+            if ((objetALaPosition(pCible) instanceof Corde || (objetALaPosition(pCible) instanceof Bombe && objetALaPosition(pCourant) instanceof Bot)) /*&& grilleEntites[pCible.x][pCible.y].size() == 1*/) { // Si la pCible est une corde
                 //if (e instanceof modele.plateau.Colonne) 
                 //System.out.println("test");
                 deplacerEntite(pCourant, pCible, e, true);
             } 
-            else if ((objetALaPosition(pCible) instanceof Heros || objetALaPosition(pCible) instanceof Bot) && objetALaPosition(pCourant) instanceof modele.plateau.Colonne) {
+            else if ((objetALaPosition(pCible) instanceof Heros || objetALaPosition(pCible) instanceof Bot) && objetALaPosition(pCourant) instanceof modele.plateau.Colonne && objetALaPositionSuivante(pCible, d) instanceof Mur) {
                 supprimerDeplacerEntite(pCourant, pCible, e);
             }
-            else if ((objetALaPosition(pCible) instanceof Heros) && objetALaPosition(pCourant) instanceof Bot) {
+            else if ((objetALaPosition(pCible) instanceof Heros || objetALaPosition(pCible) instanceof Bot) && objetALaPosition(pCourant) instanceof modele.plateau.Colonne && !(objetALaPositionSuivante(pCible, d) instanceof Mur)) {
+                monterDeplacerEntite(pCourant, pCible, e, d);
+            }
+            else if (objetALaPosition(pCible) instanceof Heros && objetALaPosition(pCourant) instanceof Bot) {
                 supprimerDeplacerEntite(pCourant, pCible, e);
+            }
+            else if (objetALaPosition(pCible) instanceof Bot && objetALaPosition(pCourant) instanceof Heros) {
+                deplacerSupprimerEntite(pCourant, pCible, e);
             }
             else if (objetALaPosition(pCible) instanceof Bombe) {
                 //System.out.println(NbBombe);
@@ -324,7 +330,23 @@ public class Jeu {
     // Surcharge pour le déplacement sur une corde
     private void deplacerEntite(Point pCourant, Point pCible, Entite e, Boolean Corde) {
         if (Corde)
-            if (grilleEntites[pCourant.x][pCourant.y].size() == 2)
+            System.out.println("//");
+            System.out.println(grilleEntites[pCible.x][pCible.y].get(0));
+            //System.out.println(grilleEntites[pCible.x][pCible.y].get(1));
+            if (grilleEntites[pCible.x][pCible.y].size() == 2 && grilleEntites[pCible.x][pCible.y].get(1) instanceof Heros){
+                grilleEntites[pCourant.x][pCourant.y].remove(1);
+                grilleEntites[pCible.x][pCible.y].remove(1);
+                HerosDead = true;
+            }
+            else if (grilleEntites[pCible.x][pCible.y].size() == 2 && grilleEntites[pCible.x][pCible.y].get(1) instanceof Bot){
+                System.out.println("test");
+                grilleEntites[pCourant.x][pCourant.y].remove(1);
+                System.out.println("test");
+                grilleEntites[pCible.x][pCible.y].remove(1);
+                System.out.println("test");
+                HerosDead = true;
+            }
+            else if (grilleEntites[pCourant.x][pCourant.y].size() == 2)
                 grilleEntites[pCourant.x][pCourant.y].remove(1);
             else grilleEntites[pCourant.x][pCourant.y].clear();
         grilleEntites[pCible.x][pCible.y].add(e);
@@ -342,7 +364,6 @@ public class Jeu {
     }
     
     private void supprimerDeplacerEntite(Point pCourant, Point pCible, Entite e) {
-        //System.out.println(objetALaPosition(pCible));
         map.remove(objetALaPosition(pCible));
         if(objetALaPosition(pCible) instanceof Bot){
             IA.getInstance().RemEntiteDynamique((EntiteDynamique)objetALaPosition(pCible));
@@ -355,6 +376,39 @@ public class Jeu {
         grilleEntites[pCible.x][pCible.y].clear();
         grilleEntites[pCible.x][pCible.y].add(e);
         grilleEntites[pCourant.x][pCourant.y].clear();
+        map.put(e, pCible);
+    }
+    
+    private void deplacerSupprimerEntite(Point pCourant, Point pCible, Entite e) {
+        map.remove(objetALaPosition(pCourant));
+        HerosDead = true;
+        grilleEntites[pCourant.x][pCourant.y].clear();
+    }
+    
+    private void monterDeplacerEntite(Point pCourant, Point pCible, Entite e, Direction d) {
+        Point newPosition = new Point();
+        
+        switch(d){
+            case droite : 
+                newPosition = new Point(pCible.x-1,pCible.y);
+                break;
+            case gauche : 
+                newPosition = new Point(pCible.x+1,pCible.y);
+                break;
+            case haut : 
+                newPosition = new Point(pCible.x,pCible.y-1);
+                break;
+            case bas : 
+                newPosition = new Point(pCible.x,pCible.y+1);
+                break;
+        }
+        
+        Entite tmp = grilleEntites[pCible.x][pCible.y].get(0);
+        grilleEntites[pCible.x][pCible.y].clear();
+        grilleEntites[newPosition.x][newPosition.y].add(tmp);
+        grilleEntites[pCible.x][pCible.y].add(e);
+        grilleEntites[pCourant.x][pCourant.y].clear();
+        map.put(tmp, newPosition);
         map.put(e, pCible);
     }
 
@@ -372,6 +426,35 @@ public class Jeu {
             if (grilleEntites[p.x][p.y].isEmpty())
                 retour = null;
             else retour = grilleEntites[p.x][p.y].get(0);
+        }
+        
+        return retour;
+    }
+    
+    private Entite objetALaPositionSuivante(Point p, Direction d) {
+        Entite retour = null;
+        Point pt = new Point();
+        
+        switch(d){
+            case droite : 
+                pt = new Point(p.x-1,p.y);
+                break;
+            case gauche : 
+                pt = new Point(p.x+1,p.y);
+                break;
+            case haut : 
+                pt = new Point(p.x,p.y-1);
+                break;
+            case bas : 
+                pt = new Point(p.x,(p.y)+1);
+                break;
+        }
+        
+        if (contenuDansGrille(pt)) {
+            //System.out.println(grilleEntites[p.x][p.y]);
+            if (grilleEntites[pt.x][pt.y].isEmpty())
+                retour = null;
+            else retour = grilleEntites[pt.x][pt.y].get(0);
         }
         
         return retour;
