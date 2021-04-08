@@ -140,12 +140,12 @@ public class VueControleurGyromite extends JFrame implements Observer {
         setSize(800, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // permet de terminer l'application à la fermeture de la fenêtre
 
-        JComponent grilleJLabels = new JPanel(new GridLayout(sizeY, sizeX/2)); // grilleJLabels va contenir les cases graphiques et les positionner sous la forme d'une grille
+        JComponent grilleJLabels = new JPanel(new GridLayout(sizeY, sizeX / 2)); // grilleJLabels va contenir les cases graphiques et les positionner sous la forme d'une grille
 
-        tabJLabel = new JLabel[sizeX/2][sizeY];
+        tabJLabel = new JLabel[sizeX / 2][sizeY];
 
         for (int y = 0; y < sizeY; y++) {
-            for (int x = 0; x < sizeX/2; x++) {
+            for (int x = 0; x < sizeX / 2; x++) {
                 JLabel jlab = new JLabel();
                 tabJLabel[x][y] = jlab; // on conserve les cases graphiques dans tabJLabel pour avoir un accès pratique à celles-ci (voir mettreAJourAffichage() )
                 grilleJLabels.add(jlab);
@@ -162,14 +162,18 @@ public class VueControleurGyromite extends JFrame implements Observer {
         //System.out.println(jeu.getHectorPos());
         Direction dirHector = jeu.getDirCouranteHector();
         //System.out.println(dirHector);
-        int x1;
-        System.out.println(xSlide);
-        if ((jeu.getHectorPos().x == 10 || jeu.getHectorPos().x == 20) && dirHector == Direction.droite) {
-            xSlide += 10;
-        } else if ((jeu.getHectorPos().x == 10 || jeu.getHectorPos().x == 20) && dirHector == Direction.gauche) {
-            xSlide -= 10;
+        int x1 = 0;
+        if (jeu.getHerosDead()) { // Si le heros meurt on ne récupère pas sa position et on reinitialise xSlide
+            xSlide = 0;
+        } else {
+            //System.out.println(xSlide);
+            if ((jeu.getHectorPos().x == 10 || jeu.getHectorPos().x == 20) && dirHector == Direction.droite) { // A la 10ème et 20ème case on décale la carte
+                xSlide += 10;
+            } else if ((jeu.getHectorPos().x == 10 || jeu.getHectorPos().x == 20) && dirHector == Direction.gauche) {
+                xSlide -= 10;
+            }
         }
-        for (int x = 0; x < sizeX/2; x++) {
+        for (int x = 0; x < sizeX / 2; x++) {
             for (int y = 0; y < sizeY; y++) {
                 x1 = x + xSlide;
                 /*if (sizeX/2 - jeu.getHectorPos().x <= 0)

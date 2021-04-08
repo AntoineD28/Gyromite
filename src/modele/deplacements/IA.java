@@ -24,7 +24,7 @@ public class IA extends RealisateurDeDeplacement {
     protected boolean realiserDeplacement() {
         boolean ret = false;
         Entite eGauche, eHaut, eBas, eBasG;
-        System.out.println(lstEntitesDynamiques);
+        //System.out.println(lstEntitesDynamiques);
         for (EntiteDynamique e : lstEntitesDynamiques) {
             Bot actuel = (Bot)e;
             boolean monter = actuel.getMonter();
@@ -51,7 +51,7 @@ public class IA extends RealisateurDeDeplacement {
                 }
                 else if (eBas instanceof Corde && monter){
                     e.setDirectionCourante(Direction.bas);
-                }
+                } 
                 else if (eBas instanceof Mur && eHaut instanceof Corde && monter){
                     double r = Math.random();
                     if (r < 0.5)

@@ -17,7 +17,7 @@ public class Gravite extends RealisateurDeDeplacement {
     @Override
     public boolean realiserDeplacement() {
         boolean ret = false;
-
+        System.out.println(lstEntitesDynamiques);
         for (EntiteDynamique e : lstEntitesDynamiques) {
             Entite eBas = e.regarderDansLaDirection(Direction.bas);
             //System.out.println(eBas);

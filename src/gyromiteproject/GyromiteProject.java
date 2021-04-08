@@ -4,53 +4,38 @@
  * and open the template in the editor.
  */
 package gyromiteproject;
+
 import VueControleur.VueControleurGyromite;
 import modele.plateau.Jeu;
+
 /**
  *
  * @author Antoine
  */
 public class GyromiteProject {
-    
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        boolean play = true;
         //int cpt = 1;
         Jeu jeu = new Jeu();
-        VueControleurGyromite vc =  new VueControleurGyromite(jeu);
-        while(true) {
-            //System.out.println(jeu.getGameOver());
-            if(jeu.getGameOver() || play){
-                //play = false;
-                if (!play) {
-                    //jeu = null;
-                    jeu = new Jeu();
-                    jeu.setGameOver(false);
-                    vc = new VueControleurGyromite(jeu);
-                }
-                
-                play = false;
+        VueControleurGyromite vc = new VueControleurGyromite(jeu);
 
-                jeu.getOrdonnanceur().addObserver(vc);
+        jeu.getOrdonnanceur().addObserver(vc);
 
-                vc.setVisible(true);
-                jeu.start(300);
-                //cpt++;
-                //System.out.println("GameOver");
-            }
-        } 
-        
-            ///recommencer = Jeu.GameOver;
-            //GameOver = jeu.getGameOver();
-            /*if (jeu.getGameOver()){
+        vc.setVisible(true);
+        jeu.start(300);
+        //cpt++;
+        //System.out.println("GameOver");
+    }
+
+    ///recommencer = Jeu.GameOver;
+    //GameOver = jeu.getGameOver();
+    /*if (jeu.getGameOver()){
                 System.out.println("game");
                 recommencer = true;
             }*/
-        //}
-        //System.out.println("game");
-    }
-    
+    //}
+    //System.out.println("game");
 }

@@ -191,6 +191,7 @@ public class Jeu {
                         Bot b = new Bot(this); 
                         addEntite(b, i, j);
                         IA.getInstance().addEntiteDynamique(b);
+                        Gravite.getInstance().addEntiteDynamique(b);
                         break;// bombe
                     default: {
                     }
@@ -341,8 +342,8 @@ public class Jeu {
     // Surcharge pour le déplacement sur une corde
     private void deplacerEntite(Point pCourant, Point pCible, Entite e, Boolean Corde) {
         if (Corde)
-            System.out.println("//");
-            System.out.println(grilleEntites[pCible.x][pCible.y].get(0));
+            //System.out.println("//");
+            //System.out.println(grilleEntites[pCible.x][pCible.y].get(0));
             //System.out.println(grilleEntites[pCible.x][pCible.y].get(1));
             if (grilleEntites[pCible.x][pCible.y].size() == 2 && grilleEntites[pCible.x][pCible.y].get(1) instanceof Heros){
                 grilleEntites[pCourant.x][pCourant.y].remove(1);
@@ -350,11 +351,11 @@ public class Jeu {
                 HerosDead = true;
             }
             else if (grilleEntites[pCible.x][pCible.y].size() == 2 && grilleEntites[pCible.x][pCible.y].get(1) instanceof Bot){
-                System.out.println("test");
+                //System.out.println("test");
                 grilleEntites[pCourant.x][pCourant.y].remove(1);
-                System.out.println("test");
+                //System.out.println("test");
                 grilleEntites[pCible.x][pCible.y].remove(1);
-                System.out.println("test");
+                //System.out.println("test");
                 HerosDead = true;
             }
             else if (grilleEntites[pCourant.x][pCourant.y].size() == 2)
@@ -481,6 +482,10 @@ public class Jeu {
     
     public void setGameOver(boolean b) {
         GameOver = b;
+    }
+    
+    public boolean getHerosDead() {
+        return HerosDead;
     }
     
     public void ConditionFin() {
