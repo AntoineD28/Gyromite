@@ -32,7 +32,7 @@ public class IA extends RealisateurDeDeplacement {
     @Override
     protected boolean realiserDeplacement() {
         boolean ret = false;
-        Entite eGauche, eHaut, eBas, eBasG;
+        Entite eGauche, eHaut, eBas, eBasG, eDroite;
 
         for (EntiteDynamique e : lstEntitesDynamiques) {
             modele.plateau.IA actuel = (modele.plateau.IA)e;
@@ -43,6 +43,7 @@ public class IA extends RealisateurDeDeplacement {
                 eHaut = e.regarderDansLaDirection(Direction.haut);
                 eBas = e.regarderDansLaDirection(Direction.bas);
                 eGauche = e.regarderDansLaDirection(Direction.gauche);
+                eDroite = e.regarderDansLaDirection(Direction.droite);
 
                 // Permet au smicks de prendre les cordes (50% de chance qu'ils prennent les cordes)
                 if (eHaut != null && eHaut.peutPermettreDeMonterDescendre() && !monter){
@@ -56,9 +57,13 @@ public class IA extends RealisateurDeDeplacement {
                     actuel.setMonter(true);
                 }
                 // Si il ne peut pas aller à gauche en haut d'une corde, il ira à droite
-                else if (eHaut instanceof Mur && eBas instanceof Corde && (eGauche == null || eGauche.peutEtreEcrase()) && !monter){
+                else if (eHaut instanceof Mur && eBas instanceof Corde && (eDroite == null || eDroite.peutEtreEcrase() || eDroite.peutEtreRamasse()) && !monter){
                     e.setDirectionCourante(Direction.gauche);
                     actuel.setMonter(true);
+                }
+                // Si il ne peut pas aller à gauche en haut d'une corde, il ira à droite
+                else if (eHaut instanceof Mur && eBas instanceof Corde && !monter){
+                    e.setDirectionCourante(Direction.bas);
                 }
                 // Permet au smicks de descendre une corde
                 else if (eBas instanceof Corde && monter){
@@ -92,7 +97,6 @@ public class IA extends RealisateurDeDeplacement {
                         break;
                         
                     case droite:
-                        Entite eDroite = e.regarderDansLaDirection(Direction.droite); // Vérification de la case à droite du smick
                         Entite eBasD = e.regarderDansLaDirection(Direction.droite, Direction.bas); // Vérification de la case en bas à droite
                         //Gère les collisions et permet au smick de ne pas tomber
                         

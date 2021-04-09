@@ -134,7 +134,6 @@ public class Jeu {
         
         // On ajoute le héros dans les entitées qui subbissent la gravité
         Gravite.getInstance().addEntiteDynamique(hector);
-        ordonnanceur.add(Gravite.getInstance());
 
         // On ajoute le héros dans les entitées dont le déplacement est géré par Controle4Directions
         Controle4Directions.getInstance().addEntiteDynamique(hector);
@@ -223,11 +222,13 @@ public class Jeu {
                         modele.plateau.IA b = new modele.plateau.IA(this); 
                         addEntite(b, i, j);
                         IA.getInstance().addEntiteDynamique(b);
+                        Gravite.getInstance().addEntiteDynamique(b);
                         break;
                 }
             }
         }
         
+        ordonnanceur.add(Gravite.getInstance());
         ordonnanceur.add(Colonne.getInstanceR());
         ordonnanceur.add(Colonne.getInstanceB());
         ordonnanceur.add(IA.getInstance());
@@ -360,11 +361,13 @@ public class Jeu {
     private Point calculerPointCible(Point pCourant, Direction d) {
         Point pCible = null;
         
-        switch(d) {
-            case haut: pCible = new Point(pCourant.x, pCourant.y - 1); break;
-            case bas : pCible = new Point(pCourant.x, pCourant.y + 1); break;
-            case gauche : pCible = new Point(pCourant.x - 1, pCourant.y); break;
-            case droite : pCible = new Point(pCourant.x + 1, pCourant.y); break;      
+        if (pCourant != null){
+            switch(d) {
+                case haut: pCible = new Point(pCourant.x, pCourant.y - 1); break;
+                case bas : pCible = new Point(pCourant.x, pCourant.y + 1); break;
+                case gauche : pCible = new Point(pCourant.x - 1, pCourant.y); break;
+                case droite : pCible = new Point(pCourant.x + 1, pCourant.y); break;      
+            }
         }
         
         return pCible;
@@ -382,11 +385,6 @@ public class Jeu {
         if (grilleEntites[pCourant.x][pCourant.y].size() == 2) {
             grilleEntites[pCourant.x][pCourant.y].remove(1);
         } 
-        // Gère le cas ou le héros touche un IA qui est en bas d'une corde
-        /*if (grilleEntites[pCible.x][pCible.y].size() == 2 && grilleEntites[pCible.x][pCible.y].get(1) instanceof modele.plateau.IA) {
-            grilleEntites[pCourant.x][pCourant.y].clear();
-            HerosDead = true;
-        } */
         else grilleEntites[pCourant.x][pCourant.y].clear();
         grilleEntites[pCible.x][pCible.y].clear();
         grilleEntites[pCible.x][pCible.y].add(e);
@@ -412,9 +410,9 @@ public class Jeu {
                 grilleEntites[pCible.x][pCible.y].remove(1);
                 HerosDead = true;
             }
-            else if (grilleEntites[pCible.x][pCible.y].size() == 2 && grilleEntites[pCible.x][pCible.y].get(1) instanceof modele.plateau.IA){
-                grilleEntites[pCourant.x][pCourant.y].remove(1);
-                grilleEntites[pCible.x][pCible.y].remove(1);
+            // Gère le cas ou le héros touche un IA qui est en bas d'une corde
+            else if (grilleEntites[pCible.x][pCible.y].size() == 2 && grilleEntites[pCible.x][pCible.y].get(1) instanceof modele.plateau.IA && grilleEntites[pCourant.x][pCourant.y].get(0) instanceof modele.plateau.Heros){
+                grilleEntites[pCourant.x][pCourant.y].clear();
                 HerosDead = true;
             }
             else if (grilleEntites[pCourant.x][pCourant.y].size() == 2)
@@ -435,6 +433,7 @@ public class Jeu {
         map.remove(objetALaPosition(pCible));
         if(objetALaPosition(pCible) instanceof modele.plateau.IA){ // Ecrasement d'un IA
             IA.getInstance().RemEntiteDynamique((EntiteDynamique)objetALaPosition(pCible));
+            Gravite.getInstance().RemEntiteDynamique((EntiteDynamique)objetALaPosition(pCible));
         }
         if(objetALaPosition(pCible) instanceof Heros){ // Ecrasement du héros
             Controle4Directions.getInstance().RemEntiteDynamique((EntiteDynamique)objetALaPosition(pCible));
@@ -507,13 +506,15 @@ public class Jeu {
      * @return l'entité présente au point p
      */
     private Entite objetALaPosition(Point p) {
-        Entite retour = null;     
-        if (contenuDansGrille(p)) {
-            if (grilleEntites[p.x][p.y].isEmpty())
-                retour = null;
-            else retour = grilleEntites[p.x][p.y].get(0);
-        }     
-        return retour;
+        Entite retour = null; 
+        if (p!= null){
+            if (contenuDansGrille(p)) {
+                if (grilleEntites[p.x][p.y].isEmpty())
+                    retour = null;
+                else retour = grilleEntites[p.x][p.y].get(0);
+            }  
+        }
+            return retour;
     }
     
     /** 
