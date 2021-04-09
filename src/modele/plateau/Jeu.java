@@ -162,6 +162,9 @@ public class Jeu {
                     case '#':
                         addEntite(new Mur(this), i, j);
                         break; // mur
+                    case '-':
+                        addEntite(new Brique(this), i, j);
+                        break; // Brique
                     case 'h':
                         addEntite(hector, i, j);
                         break; // héros
@@ -309,12 +312,12 @@ public class Jeu {
 
         // Gère les différents cas de déplacement
         if (retour) {
-            // Gère les cas ou une entité va sur une corde OU si un smick va sur une bombe
-            if ((objetALaPosition(pCible) instanceof Corde || (objetALaPosition(pCible) instanceof Bombe && objetALaPosition(pCourant) instanceof modele.plateau.IA)) /*&& grilleEntites[pCible.x][pCible.y].size() == 1*/) {
+            // Gère les cas ou un smick va sur une corde OU si un smick va sur une bombe
+            if ((objetALaPosition(pCible) instanceof Corde || (objetALaPosition(pCible) instanceof Bombe && objetALaPosition(pCourant) instanceof modele.plateau.IA))) {
                 deplacerEntite(pCourant, pCible, e, true);
             } 
             // Gère les écrasements des tuyaux 
-            else if ((objetALaPosition(pCible) instanceof Heros || objetALaPosition(pCible) instanceof modele.plateau.IA) && objetALaPosition(pCourant) instanceof modele.plateau.Colonne && objetALaPositionSuivante(pCible, d) instanceof Mur) {
+            else if ((objetALaPosition(pCible) instanceof Heros || objetALaPosition(pCible) instanceof modele.plateau.IA) && objetALaPosition(pCourant) instanceof modele.plateau.Colonne && (objetALaPositionSuivante(pCible, d) instanceof Mur || objetALaPositionSuivante(pCible, d) instanceof Brique)) {
                 supprimerDeplacerEntite(pCourant, pCible, e);
             }
             // Gère le cas pour monter à l'aide d'un tuyau
@@ -374,6 +377,11 @@ public class Jeu {
         if (grilleEntites[pCourant.x][pCourant.y].size() == 2) {
             grilleEntites[pCourant.x][pCourant.y].remove(1);
         } 
+        // Gère le cas ou le héros touche un IA qui est en bas d'une corde
+        if (grilleEntites[pCible.x][pCible.y].size() == 2 && grilleEntites[pCible.x][pCible.y].get(1) instanceof modele.plateau.IA) {
+            grilleEntites[pCourant.x][pCourant.y].clear();
+            HerosDead = true;
+        } 
         else grilleEntites[pCourant.x][pCourant.y].clear();
         grilleEntites[pCible.x][pCible.y].clear();
         grilleEntites[pCible.x][pCible.y].add(e);
@@ -390,7 +398,12 @@ public class Jeu {
     private void deplacerEntite(Point pCourant, Point pCible, Entite e, Boolean Corde) {
         if (Corde)
             if (grilleEntites[pCible.x][pCible.y].size() == 2 && grilleEntites[pCible.x][pCible.y].get(1) instanceof Heros){
-                grilleEntites[pCourant.x][pCourant.y].remove(1);
+                if (grilleEntites[pCourant.x][pCourant.y].size()==2){
+                    grilleEntites[pCourant.x][pCourant.y].remove(1);
+                }
+                else if (grilleEntites[pCourant.x][pCourant.y].size()==1){
+                    grilleEntites[pCourant.x][pCourant.y].remove(0);
+                }
                 grilleEntites[pCible.x][pCible.y].remove(1);
                 HerosDead = true;
             }

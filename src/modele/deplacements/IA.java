@@ -4,6 +4,7 @@ import modele.plateau.Entite;
 import modele.plateau.EntiteDynamique;
 import modele.plateau.Mur;
 import modele.plateau.Corde;
+import modele.plateau.Brique;
 
 /**
  *
@@ -64,7 +65,7 @@ public class IA extends RealisateurDeDeplacement {
                     e.setDirectionCourante(Direction.bas);
                 } 
                 // Permet au smicks de reprendre son déplacement apres etre descendu d'une corde (50% de chance de partir de chaque coté)
-                else if (eBas instanceof Mur && eHaut instanceof Corde && monter){
+                else if ((eBas instanceof Mur || eBas instanceof Brique) && eHaut instanceof Corde && monter){
                     double r = Math.random();
                     if (r < 0.5)
                         e.setDirectionCourante(Direction.gauche);
@@ -79,7 +80,7 @@ public class IA extends RealisateurDeDeplacement {
                         eBasG = e.regarderDansLaDirection(Direction.gauche, Direction.bas); // Vérification de la case en bas à gauche
 
                         //Gère les collisions et permet au smick de ne pas tomber
-                        if ((eGauche == null || eGauche.peutEtreRamasse() || eGauche.peutEtreEcrase() || eGauche.peutPermettreDeMonterDescendre()) && eBasG != null) {
+                        if ((eGauche == null || eGauche.peutEtreRamasse() || (eGauche.peutEtreEcrase() && !(eGauche instanceof modele.plateau.IA)) || eGauche.peutPermettreDeMonterDescendre()) && eBasG != null) {
                             //System.out.println("avancer");
                             if (e.avancerDirectionChoisie(Direction.gauche)) {
                                     ret = true;
@@ -95,7 +96,7 @@ public class IA extends RealisateurDeDeplacement {
                         Entite eBasD = e.regarderDansLaDirection(Direction.droite, Direction.bas); // Vérification de la case en bas à droite
                         //Gère les collisions et permet au smick de ne pas tomber
                         
-                        if ((eDroite == null || eDroite.peutEtreRamasse() || eDroite.peutEtreEcrase()|| eDroite.peutPermettreDeMonterDescendre()) && eBasD != null) {
+                        if ((eDroite == null || eDroite.peutEtreRamasse() || (eDroite.peutEtreEcrase() && !(eDroite instanceof modele.plateau.IA)) || eDroite.peutPermettreDeMonterDescendre()) && eBasD != null) {
                             if (e.avancerDirectionChoisie(Direction.droite)) {
                                 ret = true;
                             }
