@@ -319,7 +319,7 @@ public class Jeu {
         // Gère les différents cas de déplacement
         if (retour) {
             // Gère les cas ou un smick va sur une corde OU si un smick va sur une bombe
-            if ((objetALaPosition(pCible) instanceof Corde || (objetALaPosition(pCible) instanceof Bombe && objetALaPosition(pCourant) instanceof modele.plateau.IA))) {
+            if ((objetALaPosition(pCible) instanceof Corde || (objetALaPosition(pCible) instanceof Bombe && (objetALaPosition(pCourant) instanceof modele.plateau.IA || objetALaPosition(pCourant) instanceof Bombe || objetALaPosition(pCourant) instanceof Corde)))) {
                 deplacerEntite(pCourant, pCible, e, true);
             } 
             // Gère les écrasements des tuyaux 

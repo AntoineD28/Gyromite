@@ -150,7 +150,19 @@ public class VueControleurGyromite extends JFrame implements Observer {
     private void mettreAJourAffichage() {
         Direction dirHector = jeu.getDirCouranteHector();
         int x1 = 0;
-        if (jeu.getHerosDead() || jeu.getNbBombe() == 0) { // Si le heros meurt on ne récupère pas sa position et on reinitialise xSlide
+
+        if (jeu.getNbBombe() == 0) {
+            JFrame frame = new JFrame("Fin de jeu");
+            JLabel label = new JLabel("WIN, vous avez ramassé toutes les bombes !", JLabel.CENTER);
+            frame.add(label);
+            frame.pack();
+            frame.setSize(400, 250);
+            frame.setLocation(200, 150);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setVisible(true);
+        }
+
+        if (jeu.getHerosDead()) { // Si le heros meurt on ne récupère pas sa position et on reinitialise xSlide
             xSlide = 0;
         } 
         else {
