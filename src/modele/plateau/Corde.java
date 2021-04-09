@@ -11,12 +11,17 @@ package modele.plateau;
  */
 public class Corde extends EntiteStatique {
     
+    /**
+     * Constructeur de Corde 
+     * @param _jeu
+     */
     public Corde(Jeu _jeu) { 
         super(_jeu); 
     }
-    
+
     @Override
     public boolean peutServirDeSupport(){ return false; }; 
+
     @Override
     public boolean peutPermettreDeMonterDescendre() { return true; };
 }

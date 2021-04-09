@@ -10,20 +10,27 @@ import modele.deplacements.Direction;
 /**
  * Ennemis (Smicks)
  */
-public class Bot extends EntiteDynamique {
+public class IA extends EntiteDynamique {
     
     private boolean monter = false; 
     
-    public Bot(Jeu _jeu) {
+    /**
+     * Constructeur de IA
+     * @param _jeu
+     */
+    public IA(Jeu _jeu) {
         super(_jeu);
     }
-    
+
     @Override
     public boolean peutEtreEcrase() { return true; }
+
     @Override
     public boolean peutServirDeSupport() { return true; }
+
     @Override
     public boolean peutPermettreDeMonterDescendre() { return false; };
+
     @Override
     public boolean peutEtreRamasse() {return false;};
     
@@ -31,6 +38,10 @@ public class Bot extends EntiteDynamique {
         return monter;
     }
     
+    /**
+     * Permet de modifier l'attribut monter 
+     * @param _monter true si l'IA est monté en haut d'une corde
+     */
     public void setMonter(boolean _monter){
         monter = _monter;
     }

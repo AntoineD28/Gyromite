@@ -18,7 +18,6 @@ public class GyromiteProject {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        //int cpt = 1;
         Jeu jeu = new Jeu();
         VueControleurGyromite vc = new VueControleurGyromite(jeu);
 
@@ -26,16 +25,6 @@ public class GyromiteProject {
 
         vc.setVisible(true);
         jeu.start(300);
-        //cpt++;
-        //System.out.println("GameOver");
     }
 
-    ///recommencer = Jeu.GameOver;
-    //GameOver = jeu.getGameOver();
-    /*if (jeu.getGameOver()){
-                System.out.println("game");
-                recommencer = true;
-            }*/
-    //}
-    //System.out.println("game");
 }

@@ -9,12 +9,20 @@ package modele.plateau;
  * Héros du jeu
  */
 public class Heros extends EntiteDynamique {
+
+    /**
+     * Constructeur de Heros
+     * @param _jeu
+     */
     public Heros(Jeu _jeu) {
         super(_jeu);
     }
 
     public boolean peutEtreEcrase() { return true; }
+
     public boolean peutServirDeSupport() { return true; }
+
     public boolean peutPermettreDeMonterDescendre() { return false; };
+
     public boolean peutEtreRamasse() {return false;};
 }

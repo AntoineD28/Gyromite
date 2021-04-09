@@ -13,6 +13,10 @@ public class Controle4Directions extends RealisateurDeDeplacement {
     // Design pattern singleton
     private static Controle4Directions c3d;
 
+    /**
+     *
+     * @return une instance de Controle4Directions
+     */
     public static Controle4Directions getInstance() {
         if (c3d == null) {
             c3d = new Controle4Directions();
@@ -20,19 +24,31 @@ public class Controle4Directions extends RealisateurDeDeplacement {
         return c3d;
     }
 
+    /**
+     * Permet de modifier la direction courante d'une instance de Controle4Directions
+     * @param _directionCourante
+     */
     public void setDirectionCourante(Direction _directionCourante) {
         directionCourante = _directionCourante;
     }
     
+    /**
+     *
+     * @return la direction courante
+     */
     public Direction getDirectionCOurante() {
         return directionCourante;
     }
 
+    /**
+     * Réalise le déplacement d'une instance de Controle4Directions
+     * @return true si le déplacement à pu se faire, false sinon
+     */
     @Override
     public boolean realiserDeplacement() {
         boolean ret = false;
+        
         for (EntiteDynamique e : lstEntitesDynamiques) {
-            //System.out.println(directionCourante);
             if (directionCourante != null) {
                 switch (directionCourante) {
                     case gauche:
@@ -48,7 +64,6 @@ public class Controle4Directions extends RealisateurDeDeplacement {
                         break;
                     case haut:
                         // on ne peut pas sauter sans prendre appui
-                        // (attention, test d'appui réalisé à partir de la position courante, si la gravité à été appliquée, il ne s'agit pas de la position affichée, amélioration possible)
                         Entite eBas = e.regarderDansLaDirection(Direction.bas);
                         if (eBas != null && (eBas.peutServirDeSupport() || eBas.peutPermettreDeMonterDescendre())) {
                             if (e.avancerDirectionChoisie(Direction.haut)) {
@@ -59,11 +74,12 @@ public class Controle4Directions extends RealisateurDeDeplacement {
                 }
             }
         }
-
         return ret;
-
     }
 
+    /**
+     * Permet de mettre la direction courante à null
+     */
     public void resetDirection() {
         directionCourante = null;
     }

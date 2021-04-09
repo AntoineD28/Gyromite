@@ -10,10 +10,16 @@ package modele.plateau;
  * @author Antoine
  */
 public class Bombe extends EntiteStatique {
+
+    /**
+     * Constructeur de Bombe 
+     * @param _jeu
+     */
     public Bombe(Jeu _jeu) { super(_jeu); }
     
     @Override
     public boolean peutEtreRamasse() {return true;};
+
     @Override
     public boolean peutServirDeSupport() { return false; }
 }

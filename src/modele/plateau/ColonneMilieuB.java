@@ -11,6 +11,10 @@ package modele.plateau;
  */
 public class ColonneMilieuB extends Colonne {
     
+    /**
+     * Constructeur de ColonneMilieuB
+     * @param _jeu
+     */
     public ColonneMilieuB(Jeu _jeu) { 
         super(_jeu); 
     }

@@ -6,7 +6,6 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import static java.lang.Math.abs;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Level;
@@ -38,7 +37,6 @@ public class VueControleurGyromite extends JFrame implements Observer {
     private ImageIcon icoHero;
     private ImageIcon icoVide;
     private ImageIcon icoMur;
-    private ImageIcon icoColonne;
     private ImageIcon icoBombe;
     private ImageIcon icoColonneHautB;
     private ImageIcon icoColonneBasB;
@@ -52,9 +50,16 @@ public class VueControleurGyromite extends JFrame implements Observer {
 
     private JLabel[][] tabJLabel; // cases graphique (au moment du rafraichissement, chaque case va être associée à une icône, suivant ce qui est présent dans le modèle)
 
+    
+    
+    
+    /**
+     * Constructeur de VueControleurGyromite
+     * @param _jeu 
+     */
     public VueControleurGyromite(Jeu _jeu) {
         //System.out.println(jeu.SIZE_X);
-        sizeX = jeu.SIZE_X;
+        sizeX = _jeu.SIZE_X;
         sizeY = _jeu.SIZE_Y;
         jeu = _jeu;
         xSlide = 0;
@@ -84,22 +89,6 @@ public class VueControleurGyromite extends JFrame implements Observer {
                     case KeyEvent.VK_SPACE:
                         Colonne.getInstanceR().setDirectionCourante(Direction.changer);
                         Colonne.getInstanceB().setDirectionCourante(Direction.changer);
-                        /*Direction p = Colonne.getInstanceR().getPositionR();
-                        if (p == Direction.bas){
-                            Colonne.getInstanceR().setDirectionCouranteR(Direction.monter);
-                        }
-                        else {
-                            Colonne.getInstanceR().setDirectionCouranteR(Direction.descendre);
-                        }
-                        
-                        /*if (Colonne.getInstance().getPosition() == Direction.monter){
-                            Colonne.getInstance().setDirectionCourante(Direction.descendre);
-                            Colonne.getInstance().setPosition(Direction.descendre);
-                        }
-                        else {
-                            Colonne.getInstance().setDirectionCourante(Direction.monter);
-                            Colonne.getInstance().setPosition(Direction.monter);
-                        }*/
                         break;
                 }
             }
@@ -159,29 +148,29 @@ public class VueControleurGyromite extends JFrame implements Observer {
      * côté de la vue (tabJLabel)
      */
     private void mettreAJourAffichage() {
-        //System.out.println(jeu.getHectorPos());
         Direction dirHector = jeu.getDirCouranteHector();
-        //System.out.println(dirHector);
         int x1 = 0;
+        
         if (jeu.getHerosDead()) { // Si le heros meurt on ne récupère pas sa position et on reinitialise xSlide
             xSlide = 0;
-        } else {
-            //System.out.println(xSlide);
+        } 
+        else {
             if ((jeu.getHectorPos().x == 10 || jeu.getHectorPos().x == 20) && dirHector == Direction.droite) { // A la 10ème et 20ème case on décale la carte
                 xSlide += 10;
-            } else if ((jeu.getHectorPos().x == 10 || jeu.getHectorPos().x == 20) && dirHector == Direction.gauche) {
+            } 
+            else if ((jeu.getHectorPos().x == 10 || jeu.getHectorPos().x == 20) && dirHector == Direction.gauche) {
                 xSlide -= 10;
             }
         }
+        
         for (int x = 0; x < sizeX / 2; x++) {
             for (int y = 0; y < sizeY; y++) {
                 x1 = x + xSlide;
-                /*if (sizeX/2 - jeu.getHectorPos().x <= 0)
-                    x1 = x + abs(sizeX/2 - jeu.getHectorPos().x);
-                else x1 = x;*/
+
                 if (jeu.getGrille()[x1][y].isEmpty()) {
                     tabJLabel[x][y].setIcon(icoVide);
                 }
+                
                 if (jeu.getGrille()[x1][y].size() == 1) {
                     if (jeu.getGrille()[x1][y].get(0) instanceof Heros) { // si la grille du modèle contient un Pacman, on associe l'icône Pacman du côté de la vue
                         // System.out.println("Héros !");
@@ -190,7 +179,7 @@ public class VueControleurGyromite extends JFrame implements Observer {
                         tabJLabel[x][y].setIcon(icoMur);
                     } else if (jeu.getGrille()[x1][y].get(0) instanceof Bombe) {
                         tabJLabel[x][y].setIcon(icoBombe);
-                    } else if (jeu.getGrille()[x1][y].get(0) instanceof Bot) {
+                    } else if (jeu.getGrille()[x1][y].get(0) instanceof IA) {
                         tabJLabel[x][y].setIcon(icoBot);
                     } else if (jeu.getGrille()[x1][y].get(0) instanceof Corde) {
                         tabJLabel[x][y].setIcon(icoCorde);
@@ -217,7 +206,7 @@ public class VueControleurGyromite extends JFrame implements Observer {
                         tabJLabel[x][y].setIcon(icoMur);
                     } else if (jeu.getGrille()[x1][y].get(1) instanceof Bombe) {
                         tabJLabel[x][y].setIcon(icoBombe);
-                    } else if (jeu.getGrille()[x1][y].get(1) instanceof Bot) {
+                    } else if (jeu.getGrille()[x1][y].get(1) instanceof IA) {
                         tabJLabel[x][y].setIcon(icoBot);
                     } else if (jeu.getGrille()[x1][y].get(1) instanceof Corde) {
                         tabJLabel[x][y].setIcon(icoCorde);
@@ -239,17 +228,14 @@ public class VueControleurGyromite extends JFrame implements Observer {
         }
     }
 
+    /**
+     * Méthode update qui met à jour l'affichage
+     * @param o
+     * @param arg
+     */
     @Override
     public void update(Observable o, Object arg) {
         mettreAJourAffichage();
-        /*
-        SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        mettreAJourAffichage();
-                    }
-                }); 
-         */
-
     }
+    
 }
