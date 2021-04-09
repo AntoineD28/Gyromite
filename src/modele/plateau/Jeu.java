@@ -112,13 +112,21 @@ public class Jeu {
     public Point getHectorPos() {
         return map.get(hector);
     }
+    
+        /**
+     *
+     * @return le nombre de bombe restante
+     */
+    public int getNbBombe() {
+        return NbBombe;
+    }
 
     /**
      *
      * @return la direction courant du Heros
      */
     public Direction getDirCouranteHector() {
-        return directionCouranteHeros;
+        return Controle4Directions.getInstance().getDirectionCOurante();
     }
    
     private void initialisationDesEntites() {
@@ -272,10 +280,7 @@ public class Jeu {
      */
     public boolean deplacerEntite(Entite e, Direction d) {
         boolean retour = false;
-        
-        if (e instanceof Heros)
-            directionCouranteHeros = d;
-        
+                
         Point pCourant = map.get(e);
         
         Point pCible = calculerPointCible(pCourant, d);
@@ -378,10 +383,10 @@ public class Jeu {
             grilleEntites[pCourant.x][pCourant.y].remove(1);
         } 
         // Gère le cas ou le héros touche un IA qui est en bas d'une corde
-        if (grilleEntites[pCible.x][pCible.y].size() == 2 && grilleEntites[pCible.x][pCible.y].get(1) instanceof modele.plateau.IA) {
+        /*if (grilleEntites[pCible.x][pCible.y].size() == 2 && grilleEntites[pCible.x][pCible.y].get(1) instanceof modele.plateau.IA) {
             grilleEntites[pCourant.x][pCourant.y].clear();
             HerosDead = true;
-        } 
+        } */
         else grilleEntites[pCourant.x][pCourant.y].clear();
         grilleEntites[pCible.x][pCible.y].clear();
         grilleEntites[pCible.x][pCible.y].add(e);

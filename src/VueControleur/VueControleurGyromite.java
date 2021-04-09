@@ -150,22 +150,25 @@ public class VueControleurGyromite extends JFrame implements Observer {
     private void mettreAJourAffichage() {
         Direction dirHector = jeu.getDirCouranteHector();
         int x1 = 0;
-        
-        if (jeu.getHerosDead()) { // Si le heros meurt on ne récupère pas sa position et on reinitialise xSlide
+        if (jeu.getHerosDead() || jeu.getNbBombe() == 0) { // Si le heros meurt on ne récupère pas sa position et on reinitialise xSlide
             xSlide = 0;
         } 
         else {
-            if ((jeu.getHectorPos().x == 10 || jeu.getHectorPos().x == 20) && dirHector == Direction.droite) { // A la 10ème et 20ème case on décale la carte
+            int posX = jeu.getHectorPos().x;
+            if ((posX == 10 || posX == 20) && dirHector == Direction.droite) { // A la 10ème et 20ème case on décale la carte
                 xSlide += 10;
             } 
-            else if ((jeu.getHectorPos().x == 10 || jeu.getHectorPos().x == 20) && dirHector == Direction.gauche) {
-                xSlide -= 10;
+            else if (posX == 9 && dirHector == Direction.gauche) {
+                xSlide = 0;
+            }
+            else if (posX == 19 && dirHector == Direction.gauche){
+                xSlide -= 10;   
             }
         }
         
         for (int x = 0; x < sizeX / 2; x++) {
             for (int y = 0; y < sizeY; y++) {
-                x1 = x + xSlide;
+                x1 = x + xSlide ;
 
                 if (jeu.getGrille()[x1][y].isEmpty()) {
                     tabJLabel[x][y].setIcon(icoVide);

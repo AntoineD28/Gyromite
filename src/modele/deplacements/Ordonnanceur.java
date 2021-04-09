@@ -80,7 +80,7 @@ public class Ordonnanceur extends Observable implements Runnable {
                 }
             }
 
-            Controle4Directions.getInstance().resetDirection(); // On remet à null la direction courante 
+            //Controle4Directions.getInstance().resetDirection(); // On remet à null la direction courante 
             
             // Les colonnes doivent monter 2 fois à chaque déplacement et sont composés de 3 éléments (haut, milieu, bas), d'ou le 6)
             if (Colonne.getInstanceR().getCpt() == 6 * (Colonne.getInstanceR().GetLengthListe()/3)){ 
@@ -104,7 +104,7 @@ public class Ordonnanceur extends Observable implements Runnable {
                 setChanged();
                 notifyObservers(); // Appel de la fonction VueControleurGyromite.update()
             }
-            
+            Controle4Directions.getInstance().resetDirection(); // On remet à null la direction courante 
             jeu.ConditionFin(); // Vérifie si le jeu n'est pas fini
 
             try {
