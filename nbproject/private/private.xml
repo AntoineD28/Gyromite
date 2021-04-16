@@ -3,10 +3,23 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/Antoine/Documents/Polytech/S6/Projet/GyromiteProject/src/modele/plateau/Entite.java</file>
             <file>file:/C:/Users/Antoine/Documents/Polytech/S6/Projet/GyromiteProject/src/modele/plateau/EntiteStatique.java</file>
-            <file>file:/C:/Users/Antoine/Documents/Polytech/S6/Projet/GyromiteProject/src/modele/plateau/Heros.java</file>
-            <file>file:/C:/Users/Antoine/Documents/Polytech/S6/Projet/GyromiteProject/src/gyromiteproject/GyromiteProject.java</file>
+            <file>file:/C:/Users/Antoine/Documents/Polytech/S6/Projet/GyromiteProject/src/modele/deplacements/RealisateurDeDeplacement.java</file>
+            <file>file:/C:/Users/Antoine/Documents/Polytech/S6/Projet/GyromiteProject/src/modele/deplacements/Controle4Directions.java</file>
+            <file>file:/C:/Users/Antoine/Documents/Polytech/S6/Projet/GyromiteProject/src/modele/deplacements/Colonne.java</file>
+            <file>file:/C:/Users/Antoine/Documents/Polytech/S6/Projet/GyromiteProject/src/modele/plateau/Mur.java</file>
             <file>file:/C:/Users/Antoine/Documents/Polytech/S6/Projet/GyromiteProject/src/VueControleur/VueControleurGyromite.java</file>
+            <file>file:/C:/Users/Antoine/Documents/Polytech/S6/Projet/GyromiteProject/src/modele/plateau/Corde.java</file>
+            <file>file:/C:/Users/Antoine/Documents/Polytech/S6/Projet/GyromiteProject/src/modele/plateau/Colonne.java</file>
+            <file>file:/C:/Users/Antoine/Documents/Polytech/S6/Projet/GyromiteProject/src/modele/plateau/EntiteDynamique.java</file>
+            <file>file:/C:/Users/Antoine/Documents/Polytech/S6/Projet/GyromiteProject/src/modele/plateau/Bombe.java</file>
+            <file>file:/C:/Users/Antoine/Documents/Polytech/S6/Projet/GyromiteProject/src/modele/plateau/Heros.java</file>
+            <file>file:/C:/Users/Antoine/Documents/Polytech/S6/Projet/GyromiteProject/src/modele/deplacements/Ordonnanceur.java</file>
+            <file>file:/C:/Users/Antoine/Documents/Polytech/S6/Projet/GyromiteProject/src/modele/deplacements/IA.java</file>
+            <file>file:/C:/Users/Antoine/Documents/Polytech/S6/Projet/GyromiteProject/src/modele/plateau/Jeu.java</file>
+            <file>file:/C:/Users/Antoine/Documents/Polytech/S6/Projet/GyromiteProject/src/gyromiteproject/GyromiteProject.java</file>
+            <file>file:/C:/Users/Antoine/Documents/Polytech/S6/Projet/GyromiteProject/src/modele/deplacements/Gravite.java</file>
         </group>
     </open-files>
 </project-private>
