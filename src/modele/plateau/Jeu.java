@@ -285,8 +285,7 @@ public class Jeu {
         Point pCourant = map.get(e);
         
         Point pCible = calculerPointCible(pCourant, d);
-        
-        if (contenuDansGrille(pCible) && (objetALaPosition(pCible) == null || objetALaPosition(pCible).peutPermettreDeMonterDescendre() || objetALaPosition(pCible).peutEtreEcrase() ||objetALaPosition(pCible).peutEtreRamasse())) {
+        if ((pCourant != null) && contenuDansGrille(pCible) && (objetALaPosition(pCible) == null || objetALaPosition(pCible).peutPermettreDeMonterDescendre() || objetALaPosition(pCible).peutEtreEcrase() ||objetALaPosition(pCible).peutEtreRamasse())) {
             // compter le déplacement : 1 deplacement horizontal et vertical max par pas de temps par entité
             switch (d) {
                 case bas:
